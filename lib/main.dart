@@ -22,9 +22,10 @@ class _MyAppState extends State<MyApp> {
       title: 'Farefinder',
       initialRoute: 'home',
       theme: ThemeData(
-          fontFamily: 'NimbusSans',
-          appBarTheme: AppBarTheme(elevation: 0),
-          primaryColor: utils.colors.farefinder),
+        fontFamily: 'NimbusSans',
+        appBarTheme: AppBarTheme(elevation: 0),
+        // primaryColor: utils.colors.farefinder
+      ),
       routes: {
         'home': (BuildContext context) => HomePage(),
         'login': (BuildContext context) => LoginPage(),
