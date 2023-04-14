@@ -1,7 +1,7 @@
-import 'package:farefinder/pages/home/home_page.dart';
-import 'package:farefinder/pages/login/login_page.dart';
+import 'package:farefinder/src/pages/home/home_page.dart';
+import 'package:farefinder/src/pages/login/login_page.dart';
 import 'package:flutter/material.dart';
-import 'package:farefinder/utils/colors.dart' as utils;
+import 'package:farefinder/src/utils/colors.dart' as utils;
 
 void main() {
   runApp(const MyApp());
@@ -23,13 +23,14 @@ class _MyAppState extends State<MyApp> {
       initialRoute: 'home',
       theme: ThemeData(
         fontFamily: 'NimbusSans',
-        appBarTheme: AppBarTheme(elevation: 0),
+        appBarTheme: const AppBarTheme(elevation: 0),
         // primaryColor: utils.colors.farefinder
       ),
       routes: {
         'home': (BuildContext context) => HomePage(),
-        'login': (BuildContext context) => LoginPage(),
+        'login': (BuildContext context) => const LoginPage(),
       },
     );
   }
 }
+

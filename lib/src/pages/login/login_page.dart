@@ -1,6 +1,10 @@
+import 'package:farefinder/src/pages/login/login_controller.dart';
+import 'package:farefinder/src/widget/button_app.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
-import 'package:farefinder/utils/colors.dart' as utils;
+import 'package:farefinder/src/utils/colors.dart' as utils;
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -10,6 +14,20 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+  LoginController _con = new LoginController();
+  @override
+  void initState() {
+    super.initState();
+    // TODO: implement initState
+    print('INIT STATE');
+
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+     _con.init(context);
+      
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,18 +35,20 @@ class _LoginPageState extends State<LoginPage> {
           iconTheme: IconThemeData(color: Colors.white),
           backgroundColor: Color.fromARGB(255, 7, 7, 7),
         ),
-        body: Column(
-          children: [
-            _bannerApp(),
-            _textLogin(),
-            Expanded(
-              child: Container(),
-            ),
-            _textFieldEmail(),
-            _textFieldPassword(),
-            _buttonLogin(),
-            _textDontHaveAccount()
-          ],
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              _bannerApp(),
+              _textLogin(),
+             SizedBox(
+              height: MediaQuery.of(context).size.height * 0.17
+              ),
+              _textFieldEmail(),
+              _textFieldPassword(),
+              _buttonLogin(),
+              _textDontHaveAccount(),
+            ],
+          ),
         ));
   }
 
@@ -44,14 +64,12 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buttonLogin() {
     return Container(
-      width: double.infinity,
       margin: EdgeInsets.symmetric(horizontal: 30, vertical: 25),
-      child: ElevatedButton(
-        onPressed: () {},
-        child: Text(
-          'iniciar sesion',
-          style: TextStyle(color: Colors.white),
-        ),
+      child: ButtonApp(
+        onPressed: _con.login,
+        text: 'Iniciar Sesión',
+        color: utils.colors.farefinder,
+        textColor: Colors.white,
       ),
     );
   }
@@ -60,6 +78,7 @@ class _LoginPageState extends State<LoginPage> {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 30),
       child: TextField(
+        controller: _con.emailController,
         decoration: InputDecoration(
             hintText: 'correo@gmail.com',
             labelText: 'Correo Electronico',
@@ -75,6 +94,7 @@ class _LoginPageState extends State<LoginPage> {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
       child: TextField(
+        controller: _con.passwordController,
         obscureText: true,
         decoration: InputDecoration(
             labelText: 'Contraseña',
@@ -106,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
       clipper: WaveClipperTwo(),
       child: Container(
         color: utils.colors.farefinder,
-        height: MediaQuery.of(context).size.height * 0.22,
+        height: MediaQuery.of(context).size.height * 0.15,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

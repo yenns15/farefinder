@@ -1,10 +1,17 @@
-import 'package:farefinder/pages/home/home_controller.dart';
+import 'package:farefinder/src/pages/home/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 
-class HomePage extends StatelessWidget {
-  HomeController _con = new HomeController();
+class HomePage extends StatefulWidget {
+
   HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  HomeController _con = new HomeController();
 
   @override
   Widget build(BuildContext context) {
