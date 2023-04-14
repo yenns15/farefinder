@@ -10,7 +10,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     _con.init(context);
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           children: [
@@ -24,7 +24,9 @@ class HomePage extends StatelessWidget {
             SizedBox(height: 30),
             _imageTypeUser(context, 'assets/img/driver.png'),
             SizedBox(height: 10),
-            _textTypeUser('Conductor')
+            _textTypeUser(
+              'Conductor',
+            )
           ],
         ),
       ),
@@ -35,7 +37,7 @@ class HomePage extends StatelessWidget {
     return ClipPath(
       clipper: DiagonalPathClipperTwo(),
       child: Container(
-        color: Colors.white,
+        color: Colors.black,
         height: MediaQuery.of(context).size.height * 0.30,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -45,7 +47,8 @@ class HomePage extends StatelessWidget {
               width: 150,
               height: 100,
             ),
-            Text('Facil y Rapido')
+            Text('Nuestro servicio tu destino',
+                style: TextStyle(color: Colors.white)),
           ],
         ),
       ),
@@ -55,7 +58,7 @@ class HomePage extends StatelessWidget {
   Widget _textSelectYourRol() {
     return Text(
       'SELECCIONA TU ROL',
-      style: TextStyle(color: Colors.white),
+      style: TextStyle(color: Colors.black),
     );
   }
 
@@ -72,7 +75,7 @@ class HomePage extends StatelessWidget {
   Widget _textTypeUser(String typeUser) {
     return Text(
       typeUser,
-      style: TextStyle(color: Colors.white),
+      style: TextStyle(color: Colors.black),
     );
   }
 }

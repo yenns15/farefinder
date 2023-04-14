@@ -14,12 +14,12 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color(0xFFF10012),
+          iconTheme: IconThemeData(color: Colors.white),
+          backgroundColor: Color.fromARGB(255, 7, 7, 7),
         ),
         body: Column(
           children: [
             _bannerApp(),
-            _textDescription(),
             _textLogin(),
             Expanded(
               child: Container(),
@@ -86,26 +86,12 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _textDescription() {
-    return Container(
-      alignment: Alignment.centerLeft,
-      margin: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-      child: Text(
-        'continua con tu',
-        style: TextStyle(
-          color: Colors.black54,
-          fontSize: 24,
-        ),
-      ),
-    );
-  }
-
   Widget _textLogin() {
     return Container(
       alignment: Alignment.centerLeft,
       margin: EdgeInsets.symmetric(horizontal: 30),
       child: Text(
-        'Login',
+        'Iniciar sesión',
         style: TextStyle(
           color: Colors.black,
           fontWeight: FontWeight.bold,
@@ -130,7 +116,8 @@ class _LoginPageState extends State<LoginPage> {
               width: 150,
               height: 100,
             ),
-            const Text('Facil y Rapido')
+            const Text('Nuestro servicio tu destino',
+                style: TextStyle(color: Colors.white))
           ],
         ),
       ),
