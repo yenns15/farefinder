@@ -1,9 +1,13 @@
 import 'package:farefinder/src/pages/home/home_page.dart';
 import 'package:farefinder/src/pages/login/login_page.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:farefinder/src/utils/colors.dart' as utils;
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
   runApp(const MyApp());
 }
 
@@ -33,4 +37,3 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-
