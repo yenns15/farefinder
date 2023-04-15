@@ -4,23 +4,26 @@ import 'package:flutter/material.dart';
 class LoginController {
   late BuildContext context;
 
-  TextEditingController emailController = new TextEditingController();
-  TextEditingController passwordController = new TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
-   late AuthProvider _authProvider;
+  AuthProvider _authProvider;
+
+  LoginController({required AuthProvider authProvider})
+      : _authProvider = authProvider;
 
   Future<void> init(BuildContext context) async {
     this.context = context;
   }
 
   void login() async {
-    String email = emailController.text;
-    String password = passwordController.text;
+    String email = emailController.text.trim();
+    String password = passwordController.text.trim();
 
     print('Email: $email');
     print('Password: $password');
     try {
-      bool isLogin =  await _authProvider.login(email, password);
+      bool isLogin = await _authProvider.login(email, password);
 
       if (isLogin) {
         print('El usuario esta logeado');
@@ -32,4 +35,3 @@ class LoginController {
     }
   }
 }
-

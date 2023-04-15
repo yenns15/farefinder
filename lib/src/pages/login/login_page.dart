@@ -1,4 +1,5 @@
 import 'package:farefinder/src/pages/login/login_controller.dart';
+import 'package:farefinder/src/providers/auth_provider.dart';
 import 'package:farefinder/src/widget/button_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -15,7 +16,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
 
-  LoginController _con = new LoginController();
+  LoginController _con = new LoginController(authProvider: AuthProvider());
   @override
   void initState() {
     super.initState();

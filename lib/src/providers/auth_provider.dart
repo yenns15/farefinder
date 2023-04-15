@@ -1,14 +1,18 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
+
 class AuthProvider {
-   late FirebaseAuth _firebaseAuth;
+  FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   AuthProvider() {
+    _initFirebaseAuth();
+  }
+
+  Future<void> _initFirebaseAuth() async {
     _firebaseAuth = FirebaseAuth.instance;
   }
 
   Future<bool> login(String email, String password) async {
-   late String errorMessage;
+    String? errorMessage;
 
     try {
       await _firebaseAuth.signInWithEmailAndPassword(
@@ -23,6 +27,7 @@ class AuthProvider {
     return true;
   }
 }
+
 
 
 
