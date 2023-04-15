@@ -1,4 +1,4 @@
-import 'package:farefinder/src/pages/login/login_controller.dart';
+import 'package:farefinder/src/pages/register/register_controller.dart';
 import 'package:farefinder/src/providers/auth_provider.dart';
 import 'package:farefinder/src/widget/button_app.dart';
 import 'package:flutter/material.dart';
@@ -6,17 +6,16 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:farefinder/src/utils/colors.dart' as utils;
 
-
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
-
-  LoginController _con = new LoginController(authProvider: AuthProvider());
+class _RegisterPageState extends State<RegisterPage> {
+  RegisterController _con =
+      new RegisterController(authProvider: AuthProvider());
   @override
   void initState() {
     super.initState();
@@ -24,8 +23,7 @@ class _LoginPageState extends State<LoginPage> {
     print('INIT STATE');
 
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-     _con.init(context);
-      
+      _con.init(context);
     });
   }
 
@@ -41,37 +39,23 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               _bannerApp(),
               _textLogin(),
-             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.17
-              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.08),
+              _textFieldUsername(),
               _textFieldEmail(),
               _textFieldPassword(),
-              _buttonLogin(),
-              _textDontHaveAccount(),
+              _textFieldConfirmPassword(),
+              _buttonRegister(),
             ],
           ),
         ));
   }
 
-  Widget _textDontHaveAccount() {
-    return GestureDetector(
-      onTap: _con.goToRegisterPage,
-      child: Container(
-        margin: EdgeInsets.only(bottom: 50),
-        child: Text(
-          'No tienes cuenta?',
-          style: TextStyle(fontSize: 15, color: Colors.grey),
-        ),
-      ),
-    );
-  }
-
-  Widget _buttonLogin() {
+  Widget _buttonRegister() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 30, vertical: 25),
       child: ButtonApp(
-        onPressed: _con.login,
-        text: 'Iniciar Sesión',
+        onPressed: _con.register,
+        text: 'Registrarse ahora',
         color: utils.colors.farefinder,
         textColor: Colors.white,
       ),
@@ -94,6 +78,22 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  Widget _textFieldUsername() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+      child: TextField(
+        controller: _con.usernameController,
+        decoration: InputDecoration(
+            hintText: 'Yenns Noya',
+            labelText: 'Nombre de usuario',
+            suffixIcon: Icon(
+              Icons.person_outlined,
+              color: utils.colors.farefinder,
+            )),
+      ),
+    );
+  }
+
   Widget _textFieldPassword() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
@@ -110,12 +110,28 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  Widget _textFieldConfirmPassword() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+      child: TextField(
+        controller: _con.ConfirmPasswordController,
+        obscureText: true,
+        decoration: InputDecoration(
+            labelText: 'Confirmar Contraseña',
+            suffixIcon: Icon(
+              Icons.lock_open_outlined,
+              color: utils.colors.farefinder,
+            )),
+      ),
+    );
+  }
+
   Widget _textLogin() {
     return Container(
       alignment: Alignment.centerLeft,
       margin: EdgeInsets.symmetric(horizontal: 30),
       child: Text(
-        'Iniciar sesión',
+        'Registro',
         style: TextStyle(
           color: Colors.black,
           fontWeight: FontWeight.bold,
