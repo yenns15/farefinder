@@ -1,60 +1,90 @@
+import 'package:farefinder/src/models/client.dart';
 import 'package:farefinder/src/providers/auth_provider.dart';
+import 'package:farefinder/src/providers/client_provider.dart';
+import 'package:farefinder/src/utils/my_progress_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:farefinder/src/utils/snackbar.dart' as utils;
+import 'package:progress_dialog/progress_dialog.dart';
 
 class RegisterController {
   late BuildContext context;
+  final GlobalKey<ScaffoldState> key = GlobalKey<ScaffoldState>();
 
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController ConfirmPasswordController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
 
-  AuthProvider _authProvider;
+  final AuthProvider _authProvider;
+  final ClientProvider _clientProvider;
+  late ProgressDialog _progressDialog;
 
   RegisterController({required AuthProvider authProvider})
-      : _authProvider = authProvider;
+      : _authProvider = authProvider,
+        _clientProvider = ClientProvider();
 
   Future<void> init(BuildContext context) async {
     this.context = context;
+    _progressDialog = MyProgressDialog.createProgressDialog(context,'Espere un momento');
   }
 
   void register() async {
-    String username = usernameController.text;
-    String email = emailController.text.trim();
-    String confirmPassword = ConfirmPasswordController.text.trim();
-    String password = passwordController.text.trim();
+    final String username = usernameController.text;
+    final String email = emailController.text.trim();
+    final String confirmPassword = confirmPasswordController.text.trim();
+    final String password = passwordController.text.trim();
 
     print('Email: $email');
     print('Password: $password');
 
-    if (username.isEmpty &&
-        email.isEmpty &&
-        password.isEmpty &&
-        confirmPassword.isEmpty) {
-      print('debe ingresar todos los campos');
+    if (username.isEmpty && email.isEmpty && password.isEmpty && confirmPassword.isEmpty) {
+      print('Debe ingresar todos los campos');
+     utils.Snackbar.showSnackbar(context, key, 'Debe ingresar todos los campos');
       return;
     }
 
     if (confirmPassword != password) {
-      print('Las contraseñas no coinciden');
+       utils.Snackbar.showSnackbar(context, key, 'Las contraseñas no coinciden');
       return;
     }
 
     if (password.length < 6) {
-      print('la contraseña debe tener al menos 6 caracteres');
+      print('La contraseña debe tener al menos 6 caracteres');
+     utils.Snackbar.showSnackbar(context, key, 'La contraseña debe tener al menos 6 caracteres');
       return;
     }
 
+    _progressDialog.show();
+
     try {
-      bool isRegister = await _authProvider.register(email, password);
+      final bool isRegister = await _authProvider.register(email, password);
 
       if (isRegister) {
-        print('El usuario se registro correctamente');
+        final user = _authProvider.getUser();
+        if (user != null) {
+          final Client client = Client(
+              id: user.uid,
+              email: user.email?.trim() ?? '',
+              username: username,
+              password: password);
+
+          await _clientProvider.create(client);
+          _progressDialog.hide();
+          utils.Snackbar.showSnackbar(context, key, 'El usuario se registró correctamente');
+          print('El usuario se registró correctamente');
+        } else {
+          _progressDialog.hide();
+          print('No se pudo obtener información del usuario');
+        }
       } else {
+        _progressDialog.hide();
         print('El usuario no se pudo registrar');
       }
     } catch (error) {
+      _progressDialog.hide();
+      utils.Snackbar.showSnackbar(context, key, 'Error: $error');
       print('Error: $error');
     }
   }
 }
+

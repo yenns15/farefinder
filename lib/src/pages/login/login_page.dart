@@ -6,7 +6,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:farefinder/src/utils/colors.dart' as utils;
 
-
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -15,7 +14,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
   LoginController _con = new LoginController(authProvider: AuthProvider());
   @override
   void initState() {
@@ -24,14 +22,14 @@ class _LoginPageState extends State<LoginPage> {
     print('INIT STATE');
 
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-     _con.init(context);
-      
+      _con.init(context);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: _con.key,
         appBar: AppBar(
           iconTheme: IconThemeData(color: Colors.white),
           backgroundColor: Color.fromARGB(255, 7, 7, 7),
@@ -41,9 +39,7 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               _bannerApp(),
               _textLogin(),
-             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.17
-              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.17),
               _textFieldEmail(),
               _textFieldPassword(),
               _buttonLogin(),

@@ -30,9 +30,10 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          iconTheme: IconThemeData(color: Colors.white),
-          backgroundColor: Color.fromARGB(255, 7, 7, 7),
+      key: _con.key,
+      appBar: AppBar(
+      iconTheme: IconThemeData(color: Colors.white),
+      backgroundColor: Color.fromARGB(255, 7, 7, 7),
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -114,7 +115,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
       child: TextField(
-        controller: _con.ConfirmPasswordController,
+        controller: _con.confirmPasswordController,
         obscureText: true,
         decoration: InputDecoration(
             labelText: 'Confirmar Contraseña',
