@@ -2,6 +2,7 @@ import 'package:farefinder/src/providers/auth_provider.dart';
 import 'package:farefinder/src/utils/my_progress_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:farefinder/src/utils/snackbar.dart' as utils;
+import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 
 class LoginController {
   late BuildContext context;
@@ -14,13 +15,12 @@ class LoginController {
   late ProgressDialog _progressDialog;
 
   LoginController({required AuthProvider authProvider})
-      : _authProvider = authProvider {
-    _progressDialog =
-        MyProgressDialog.createProgressDialog(context, 'Espere un momento');
-  }
+      : _authProvider = authProvider;
 
   Future<void> init(BuildContext context) async {
     this.context = context;
+    _progressDialog =
+        MyProgressDialog.createProgressDialog(context, 'Espere un momento');
   }
 
   void goToRegisterPage() {
@@ -41,13 +41,15 @@ class LoginController {
         print('El usuario esta logeado');
         utils.Snackbar.showSnackbar(context, key, 'El usuario esta logeado');
       } else {
-          utils.Snackbar.showSnackbar(context, key, 'El usuario no se pudo autenticar');
+        utils.Snackbar.showSnackbar(
+            context, key, 'El usuario no se pudo autenticar');
         print('El usuario no se pudo autenticar');
       }
     } catch (error) {
-        utils.Snackbar.showSnackbar(context, key, 'Error: $error');
+      utils.Snackbar.showSnackbar(context, key, 'Error: $error');
       _progressDialog.hide();
       print('Error: $error');
     }
   }
 }
+
