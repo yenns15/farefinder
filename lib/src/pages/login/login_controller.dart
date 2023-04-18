@@ -1,7 +1,6 @@
 import 'package:farefinder/src/providers/auth_provider.dart';
 import 'package:farefinder/src/utils/my_progress_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:progress_dialog/progress_dialog.dart';
 import 'package:farefinder/src/utils/snackbar.dart' as utils;
 
 class LoginController {
@@ -41,7 +40,6 @@ class LoginController {
       if (isLogin) {
         print('El usuario esta logeado');
         utils.Snackbar.showSnackbar(context, key, 'El usuario esta logeado');
-      
       } else {
           utils.Snackbar.showSnackbar(context, key, 'El usuario no se pudo autenticar');
         print('El usuario no se pudo autenticar');
