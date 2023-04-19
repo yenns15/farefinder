@@ -7,7 +7,7 @@ import 'package:farefinder/src/utils/snackbar.dart' as utils;
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 
 
-class RegisterController {
+class ConductorRegisterController {
   late BuildContext context;
   final GlobalKey<ScaffoldState> key = GlobalKey<ScaffoldState>();
 
@@ -16,16 +16,14 @@ class RegisterController {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
 
-  final AuthProvider _authProvider;
-  final ClientProvider _clientProvider;
+  late  AuthProvider _authProvider;
+  late ClientProvider _clientProvider;
   late ProgressDialog _progressDialog;
-
-  RegisterController({required AuthProvider authProvider})
-      : _authProvider = authProvider,
-        _clientProvider = ClientProvider();
 
   Future<void> init(BuildContext context) async {
     this.context = context;
+    _authProvider = new AuthProvider();
+    _clientProvider = new ClientProvider();
     _progressDialog = MyProgressDialog.createProgressDialog(context,'Espere un momento');
   }
 
@@ -88,4 +86,3 @@ class RegisterController {
     }
   }
 }
-

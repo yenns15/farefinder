@@ -1,21 +1,21 @@
-import 'package:farefinder/src/pages/register/register_controller.dart';
-import 'package:farefinder/src/providers/auth_provider.dart';
+import 'package:farefinder/src/pages/conductor/register/conductor_register_controller.dart';
 import 'package:farefinder/src/widget/button_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:farefinder/src/utils/colors.dart' as utils;
 
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+class ConductorRegisterPage extends StatefulWidget {
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  _ConductorRegisterPageState createState() => _ConductorRegisterPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
-  RegisterController _con =
-      new RegisterController(authProvider: AuthProvider());
+class _ConductorRegisterPageState extends State<ConductorRegisterPage> {
+
+  ConductorRegisterController _con = new ConductorRegisterController();
+
+
   @override
   void initState() {
     super.initState();
@@ -132,7 +132,7 @@ class _RegisterPageState extends State<RegisterPage> {
       alignment: Alignment.centerLeft,
       margin: EdgeInsets.symmetric(horizontal: 30),
       child: Text(
-        'Registro',
+        'Registro Conductor',
         style: TextStyle(
           color: Colors.black,
           fontWeight: FontWeight.bold,

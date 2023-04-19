@@ -1,5 +1,6 @@
 import 'package:farefinder/src/providers/auth_provider.dart';
 import 'package:farefinder/src/utils/my_progress_dialog.dart';
+import 'package:farefinder/src/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:farefinder/src/utils/snackbar.dart' as utils;
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
@@ -14,17 +15,32 @@ class LoginController {
   AuthProvider _authProvider;
   late ProgressDialog _progressDialog;
 
-  LoginController({required AuthProvider authProvider})
+  late SharedPref _sharedPref;
+   String _typeUser = '';
+
+ LoginController({required AuthProvider authProvider})
       : _authProvider = authProvider;
 
   Future<void> init(BuildContext context) async {
     this.context = context;
     _progressDialog =
         MyProgressDialog.createProgressDialog(context, 'Espere un momento');
+      _sharedPref = new SharedPref();
+      _typeUser = await _sharedPref.read('typeUser');
+
+      print('======= TIPO DE USUARIO =======');
+      print(_typeUser);
   }
 
   void goToRegisterPage() {
-    Navigator.pushNamed(context, 'register');
+
+    if (_typeUser == 'cliente'){
+      Navigator.pushNamed(context, 'cliente/register');
+    }
+    else{
+       Navigator.pushNamed(context, 'conductor/register');
+    }
+
   }
 
   void login() async {

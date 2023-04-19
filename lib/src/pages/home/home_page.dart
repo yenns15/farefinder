@@ -25,11 +25,11 @@ class _HomePageState extends State<HomePage> {
             SizedBox(height: 50),
             _textSelectYourRol(),
             SizedBox(height: 30),
-            _imageTypeUser(context, 'assets/img/pasajero.png'),
+            _imageTypeUser(context, 'assets/img/pasajero.png', 'Cliente'),
             SizedBox(height: 10),
             _textTypeUser('Cliente'),
             SizedBox(height: 30),
-            _imageTypeUser(context, 'assets/img/driver.png'),
+            _imageTypeUser(context, 'assets/img/driver.png','Conductor'),
             SizedBox(height: 10),
             _textTypeUser(
               'Conductor',
@@ -69,9 +69,11 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _imageTypeUser(BuildContext context, String image) {
+  Widget _imageTypeUser(BuildContext context, String image, String typeUser) {
     return GestureDetector(
-        onTap: _con.goToLoginPage,
+        onTap: (){
+          _con.goToLoginPage(typeUser);
+        },
         child: CircleAvatar(
           backgroundImage: AssetImage(image),
           radius: 50,
