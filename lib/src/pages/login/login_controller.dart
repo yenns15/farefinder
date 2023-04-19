@@ -16,7 +16,7 @@ class LoginController {
   late ProgressDialog _progressDialog;
 
   late SharedPref _sharedPref;
-   String _typeUser = '';
+  late String _typeUser;
 
  LoginController({required AuthProvider authProvider})
       : _authProvider = authProvider;
@@ -32,16 +32,15 @@ class LoginController {
       print(_typeUser);
   }
 
-  void goToRegisterPage() {
+void goToRegisterPage() async {
+  _typeUser = await _sharedPref.read('typeUser');
 
-    if (_typeUser == 'cliente'){
-      Navigator.pushNamed(context, 'cliente/register');
-    }
-    else{
-       Navigator.pushNamed(context, 'conductor/register');
-    }
-
+  if (_typeUser == 'cliente') {
+    Navigator.pushNamed(context, 'cliente/register');
+  } else {
+    Navigator.pushNamed(context, 'conductor/register');
   }
+}
 
   void login() async {
     String email = emailController.text.trim();

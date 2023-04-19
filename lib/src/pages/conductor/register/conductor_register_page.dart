@@ -1,4 +1,5 @@
 import 'package:farefinder/src/pages/conductor/register/conductor_register_controller.dart';
+import 'package:farefinder/src/utils/otp_widget.dart';
 import 'package:farefinder/src/widget/button_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -6,6 +7,8 @@ import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:farefinder/src/utils/colors.dart' as utils;
 
 class ConductorRegisterPage extends StatefulWidget {
+  const ConductorRegisterPage({super.key});
+
 
   @override
   _ConductorRegisterPageState createState() => _ConductorRegisterPageState();
@@ -41,6 +44,18 @@ class _ConductorRegisterPageState extends State<ConductorRegisterPage> {
               _bannerApp(),
               _textLogin(),
               SizedBox(height: MediaQuery.of(context).size.height * 0.08),
+              _textLicencePlate(),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 25),
+                child: OTPFields(
+                  pin1: _con.pin1Controller,
+                  pin2: _con.pin2Controller,
+                  pin3: _con.pin3Controller,
+                  pin4: _con.pin4Controller,
+                  pin5: _con.pin5Controller,
+                  pin6: _con.pin6Controller,
+                ),
+              ),
               _textFieldUsername(),
               _textFieldEmail(),
               _textFieldPassword(),
@@ -123,6 +138,22 @@ class _ConductorRegisterPageState extends State<ConductorRegisterPage> {
               Icons.lock_open_outlined,
               color: utils.colors.farefinder,
             )),
+      ),
+    );
+  }
+
+
+  Widget _textLicencePlate(){
+    return Container(
+      alignment: Alignment.centerLeft,
+      margin: EdgeInsets.symmetric(horizontal: 30),
+      child: Text(
+        'Placa Del Vehiculo',
+        style: TextStyle(
+          color: Colors.grey[600],
+          fontSize: 17
+        ),
+
       ),
     );
   }

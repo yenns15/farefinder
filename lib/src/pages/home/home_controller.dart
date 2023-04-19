@@ -2,12 +2,15 @@ import 'package:farefinder/src/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
 
 class HomeController {
- late BuildContext context;
- late SharedPref _sharedPref;
-  Future? init(BuildContext context) {
+
+
+  late BuildContext context;
+  late SharedPref _sharedPref;
+
+
+   void init(BuildContext context) {
     this.context = context;
     _sharedPref = new SharedPref();
-    return null;
   }
 
   void goToLoginPage(String typeUser) {
@@ -15,8 +18,8 @@ class HomeController {
     Navigator.pushNamed(context, 'login');
   }
 
-  void saveTypeUser(String typeUser) {
-     _sharedPref.save('typeUser', typeUser);
+  void saveTypeUser(String typeUser) async {
+      _sharedPref.save('typeUser', typeUser);
   }
 
 }

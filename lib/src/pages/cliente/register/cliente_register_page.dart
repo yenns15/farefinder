@@ -7,6 +7,8 @@ import 'package:farefinder/src/utils/colors.dart' as utils;
 
 
 class ClienteRegisterPage extends StatefulWidget {
+  const ClienteRegisterPage({super.key});
+
 
   @override
   State<ClienteRegisterPage> createState() => _ClienteRegisterPageState();
@@ -131,7 +133,7 @@ class _ClienteRegisterPageState extends State<ClienteRegisterPage> {
       alignment: Alignment.centerLeft,
       margin: EdgeInsets.symmetric(horizontal: 30),
       child: Text(
-        'Registro',
+        'Registro Usuario',
         style: TextStyle(
           color: Colors.black,
           fontWeight: FontWeight.bold,
