@@ -69,7 +69,10 @@ class ClienteRegisterController {
               password: password);
 
           await _clientProvider.create(client);
+
           _progressDialog.hide();
+          Navigator.pushNamedAndRemoveUntil(context, 'cliente/map',(route) => false);
+
           utils.Snackbar.showSnackbar(context, key, 'El usuario se registró correctamente');
           print('El usuario se registró correctamente');
         } else {

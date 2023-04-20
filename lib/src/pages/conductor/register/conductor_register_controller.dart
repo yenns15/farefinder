@@ -90,6 +90,8 @@ class ConductorRegisterController {
 
           await _conductorProvider.create(conductor);
           _progressDialog.hide();
+          Navigator.pushNamedAndRemoveUntil(context, 'conductor/map',(route) => false);
+
           utils.Snackbar.showSnackbar(context, key, 'El Conductor se registró correctamente');
           print('El Conductor se registró correctamente');
         } else {

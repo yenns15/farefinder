@@ -52,9 +52,11 @@ void goToRegisterPage() async {
     try {
       bool isLogin = await _authProvider.login(email, password);
       _progressDialog.hide();
+
       if (isLogin) {
         print('El usuario esta logeado');
         utils.Snackbar.showSnackbar(context, key, 'El usuario esta logeado');
+        Navigator.pushNamedAndRemoveUntil(context, 'cliente/map',(route) => false);
       } else {
         utils.Snackbar.showSnackbar(
             context, key, 'El usuario no se pudo autenticar');
