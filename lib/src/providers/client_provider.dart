@@ -22,5 +22,15 @@ class ClientProvider {
         return Future.error(errorMessage);
       }
     }
+
+    Future<Client?> getById(String id) async {
+      DocumentSnapshot document = await _ref.doc(id).get();
+      Map<String, dynamic>? data = document.data() as Map<String, dynamic>?;
+      if (document.exists){
+       Client client = Client.fromJson(data!);
+       return client;
+      }
+        return null;
+    }
   }
 

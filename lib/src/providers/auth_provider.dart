@@ -61,11 +61,6 @@ class AuthProvider {
     return true;
   }
 
-
-
-
- 
-
   Future<bool> register(String email, String password) async {
     String? errorMessage;
 
@@ -81,14 +76,11 @@ class AuthProvider {
     }
     return true;
   }
+    Future<void> signOut() async {
+        await _firebaseAuth.signOut();
+      } 
+    }
 
-
-
-
-
-
-
-}
 
 
 

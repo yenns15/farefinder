@@ -22,5 +22,14 @@ class ConductorProvider {
         return Future.error(errorMessage);
       }
     }
+      Future<Conductor?> getById(String id) async {
+      DocumentSnapshot document = await _ref.doc(id).get();
+      Map<String, dynamic>? data = document.data() as Map<String, dynamic>?;
+      if (document.exists){
+       Conductor conductor = Conductor.fromJson(data!);
+       return conductor;
+      }
+        return null;
+      }
   }
 

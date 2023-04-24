@@ -26,6 +26,7 @@ class HomeController {
   void checkIfUserIsAuth(){
     bool isSignedIn = _authProvider.isSignedIn();
     if(isSignedIn){
+      print('Esta Logeado');
       if (_typeUser == 'cliente'){
           Navigator.pushNamedAndRemoveUntil(context, 'cliente/map',(route) => false);
         }
@@ -33,9 +34,10 @@ class HomeController {
           Navigator.pushNamedAndRemoveUntil(context, 'conductor/map',(route) => false);
         }
     }
+    else {
+      print('No esta Logeado');
+    }
   }
-
-
 
   void goToLoginPage(String typeUser) {
     saveTypeUser(typeUser);

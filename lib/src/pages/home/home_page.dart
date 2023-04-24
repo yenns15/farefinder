@@ -1,5 +1,6 @@
 import 'package:farefinder/src/pages/home/home_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,8 +15,18 @@ class _HomePageState extends State<HomePage> {
   HomeController _con = new HomeController();
 
   @override
+  void initState() {
+    super.initState();
+    // TODO: implement initState
+    print('INIT STATE');
+
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+      _con.init(context);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    _con.init(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
