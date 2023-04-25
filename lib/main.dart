@@ -6,14 +6,22 @@ import 'package:farefinder/src/pages/home/home_page.dart';
 import 'package:farefinder/src/pages/login/login_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:farefinder/src/utils/colors.dart' as utils;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-
-   runApp(const MyApp());
-
+  GetPlatform.isWeb
+      ? await Firebase.initializeApp(
+          options: const FirebaseOptions(
+              apiKey: "AIzaSyCTjfv2QB_gQJ6R9u5HoMJUsuWFTXu1iww",
+              authDomain: "farefinder-ab34b.firebaseapp.com",
+              projectId: "farefinder-ab34b",
+              storageBucket: "farefinder-ab34b.appspot.com",
+              messagingSenderId: "907384138389",
+              appId: "1:907384138389:web:19f90443291d0fbc50099c"))
+      : await Firebase.initializeApp();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
