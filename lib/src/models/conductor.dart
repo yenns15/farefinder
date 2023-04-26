@@ -20,10 +20,10 @@ class Conductor {
     String plate;
 
     factory Conductor.fromJson(Map<String, dynamic> json) => Conductor(
-        id: json["id"],
-        username: json["username"],
-        email: json["email"],
-        password: json["password"],
+        id: json["id"]??'',
+        username: json["username"]??'',
+        email: json["email"]??'',
+        password: json["password"]??'',
         plate: json["plate"],
     );
 
