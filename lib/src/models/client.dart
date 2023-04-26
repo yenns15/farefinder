@@ -18,10 +18,10 @@ class Client {
   });
 
   factory Client.fromJson(Map<String, dynamic> json) => Client(
-        id: json["id"],
-        username: json["username"],
-        email: json["email"],
-        password: json["password"],
+        id: json["id"]??'',
+        username: json["username"]??'',
+        email: json["email"]??'',
+        password: json["password"]??''
       );
 
   Map<String, dynamic> toJson() => {
