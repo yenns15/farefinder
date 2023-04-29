@@ -4,13 +4,15 @@ class ButtonApp extends StatelessWidget {
   Color color;
   Color textColor;
   String text;
+  IconData icon;
   Function onPressed;
 
   ButtonApp({
     this.color = Colors.black,
     this.textColor = Colors.white,
-    required this.onPressed,
-    required this.text,
+    this.icon = Icons.arrow_forward_ios,
+    required Function this.onPressed,
+  required String this.text,
   });
 
   @override
