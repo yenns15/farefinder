@@ -22,6 +22,7 @@ class _ConductorMapPageState extends State<ConductorMapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _con.key,
       body: Stack(
         children: [
           _googleMapsWidget(),
@@ -99,6 +100,8 @@ class _ConductorMapPageState extends State<ConductorMapPage> {
       mapType: MapType.normal,
       initialCameraPosition: _con.initialPosition,
       onMapCreated: _con.onMapCreated,
+      myLocationEnabled: true,
+      myLocationButtonEnabled: true,
     );
   }
 }
