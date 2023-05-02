@@ -1,10 +1,11 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as location;
 import 'package:farefinder/src/utils/snackbar.dart' as utils;
+
+
 class ConductorMapController {
   late BuildContext context;
   GlobalKey<ScaffoldState> key = new GlobalKey<ScaffoldState>();
@@ -27,31 +28,27 @@ class ConductorMapController {
     _mapController.complete(controller);
   }
 
-  void updateLocation() async {
+void updateLocation() async {
     try {
       await _determinePosition();
-      _position = await Geolocator.getLastKnownPosition();
       centerPosition();
       _positionStream = Geolocator.getPositionStream(
-        desiredAccuracy: LocationAccuracy.best,
-        distanceFilter: 1
-      ).listen((Position position) {
-       _position = position;
-        animateCameraToposition(_position.latitude, _position.longitude);
-        
+              desiredAccuracy: LocationAccuracy.best, distanceFilter: 1)
+          .listen((Position position) {
+        _position = position;
+        animateCameraToposition(_position!.latitude, _position!.longitude);
       });
     } catch (error) {
       print('Error en la localizacion: $error');
     }
-  }
-
+}
   void centerPosition() {
     if (_position != null) {
-      animateCameraToposition(_position.latitude, _position.longitude);
+      animateCameraToposition(_position!.latitude, _position!.longitude);
 
     }
     else{
-      utils.Snackbar.showSnackbar(context, key, 'Activa el GPS')
+      utils.Snackbar.showSnackbar(context, key, 'Activa el GPS');
     }
   }
 
