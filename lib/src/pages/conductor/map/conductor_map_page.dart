@@ -16,7 +16,7 @@ class _ConductorMapPageState extends State<ConductorMapPage> {
   @override
   void initState() {
     super.initState();
-    _con.init(context);
+    _con.init(context, refresh);
   }
 
   @override
@@ -31,10 +31,7 @@ class _ConductorMapPageState extends State<ConductorMapPage> {
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children:[
-                _buttonDrawer(),
-                _buttonCenterPosition()
-                  ],
+                  children: [_buttonDrawer(), _buttonCenterPosition()],
                 ),
                 Expanded(child: Container()),
                 _ButtonConnect(),
@@ -48,22 +45,21 @@ class _ConductorMapPageState extends State<ConductorMapPage> {
 
   Widget _buttonCenterPosition() {
     return Container(
-      alignment: Alignment.centerRight,
-      margin: EdgeInsets.symmetric(horizontal: 10),
+        alignment: Alignment.centerRight,
+        margin: EdgeInsets.symmetric(horizontal: 10),
         child: Card(
-      shape: CircleBorder(),
-      color: Colors.white,
-      elevation: 4.0,
-      child: Container(
-        padding: EdgeInsets.all(10),
-        child: Icon(
-          Icons.location_searching, 
-          color: Colors.grey[600],
-          size: 20,
+          shape: CircleBorder(),
+          color: Colors.white,
+          elevation: 4.0,
+          child: Container(
+            padding: EdgeInsets.all(10),
+            child: Icon(
+              Icons.location_searching,
+              color: Colors.grey[600],
+              size: 20,
+            ),
           ),
-      ),
-    )
-    );
+        ));
   }
 
   Widget _buttonDrawer() {
@@ -102,6 +98,11 @@ class _ConductorMapPageState extends State<ConductorMapPage> {
       onMapCreated: _con.onMapCreated,
       myLocationEnabled: true,
       myLocationButtonEnabled: true,
+      markers: Set<Marker>.of(_con.markers.values),
     );
+  }
+
+  void refresh() {
+    setState(() {});
   }
 }
