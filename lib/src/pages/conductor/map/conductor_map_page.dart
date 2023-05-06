@@ -96,8 +96,8 @@ class _ConductorMapPageState extends State<ConductorMapPage> {
       mapType: MapType.normal,
       initialCameraPosition: _con.initialPosition,
       onMapCreated: _con.onMapCreated,
-      myLocationEnabled: true,
-      myLocationButtonEnabled: true,
+      myLocationEnabled: false,
+      myLocationButtonEnabled: false,
       markers: Set<Marker>.of(_con.markers.values),
     );
   }

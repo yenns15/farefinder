@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as location;
@@ -36,17 +37,24 @@ class ConductorMapController {
   void updateLocation() async {
     try {
       await _determinePosition();
+      _position = await Geolocator.getLastKnownPosition();
       centerPosition();
-      addMarker('conductor', _position!.latitude, _position!.longitude,
-          'Tu posicion', '', markerDriver);
+      addMarker('conductor', _position!.latitude,
+       _position!.longitude,
+          'Tu posicion', '', 
+           markerDriver);
       refresh();
 
       _positionStream = Geolocator.getPositionStream(
               desiredAccuracy: LocationAccuracy.best, distanceFilter: 1)
           .listen((Position position) {
         _position = position;
-        addMarker('conductor', _position!.latitude, _position!.longitude,
-            'Tu posicion', '', markerDriver);
+        addMarker('conductor', 
+        _position!.latitude, 
+        _position!.longitude,
+            'Tu posicion', '',
+             markerDriver
+             );
         animateCameraToposition(_position!.latitude, _position!.longitude);
         refresh();
       });
@@ -126,6 +134,14 @@ class ConductorMapController {
       icon: iconMaker,
       position: LatLng(lat, lng),
       infoWindow: InfoWindow(title: title, snippet: content),
+      draggable: false,
+      zIndex: 2,
+      flat: true,
+      anchor:  Offset(0.5, 0.5),
+      rotation: _position!.heading,
+
+    
+    
     );
     markers[id] = marker;
   }
