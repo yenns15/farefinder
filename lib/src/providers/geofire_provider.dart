@@ -16,7 +16,7 @@ class GeofireProvider {
     return _geo
         .collection(
             collectionRef:
-                _ref.where('status', isEqualTo: 'conductores_disponibles'))
+                _ref.where('status', isEqualTo: 'conductore_disponible'))
         .within(center: center, radius: radius, field: 'position');
   }
 

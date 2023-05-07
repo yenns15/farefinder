@@ -100,7 +100,7 @@ class ClienteMapController {
 
   void getNearbyDrivers() {
     Stream<List<DocumentSnapshot>> stream = _geofireProvider.getNearbyDrivers(
-        _position!.latitude, _position!.longitude, 50);
+        _position!.latitude, _position!.longitude, 10);
 
     stream.listen((List<DocumentSnapshot> documentList) {
       for (DocumentSnapshot d in documentList) {
@@ -130,7 +130,7 @@ class ClienteMapController {
             d.id,
             point.latitude,
             point.longitude,
-            'Conductor disponible',
+            'conductor_disponible',
             '',
             markerDriver,
           );
