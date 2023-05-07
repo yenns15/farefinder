@@ -44,11 +44,26 @@ class _ClienteMapPageState extends State<ClienteMapPage> {
                 _ButtonConnect(),
               ],
             ),
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: _iconMyLocation(),
           )
         ],
       ),
     );
   }
+
+
+   Widget _iconMyLocation() {
+    return Image.asset(
+      'assets/img/my_location.png',
+      width: 65,
+      height: 65,
+    );
+  }
+
+
 
   Widget _drawer() {
     return Drawer(

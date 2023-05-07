@@ -14,8 +14,7 @@ import 'package:location/location.dart' as location;
 import 'package:farefinder/src/utils/snackbar.dart' as utils;
 
 class ClienteMapController {
-
- late BuildContext context;
+  late BuildContext context;
   late Function refresh;
   GlobalKey<ScaffoldState> key = new GlobalKey<ScaffoldState>();
   Completer<GoogleMapController> _mapController = Completer();
@@ -31,7 +30,7 @@ class ClienteMapController {
 
   late GeofireProvider _geofireProvider;
   late AuthProvider _authProvider;
-   late ConductorProvider _conductorProvider;
+  late ConductorProvider _conductorProvider;
   late ClientProvider _clientProvider;
 
   bool isConnect = false;
@@ -57,8 +56,7 @@ class ClienteMapController {
   void getClienteInfo() {
     Stream<DocumentSnapshot> clientstream =
         _clientProvider.getByIdStream(_authProvider.getUser()!.uid);
-    _clientInfoSubscription =
-        clientstream.listen((DocumentSnapshot document) {
+    _clientInfoSubscription = clientstream.listen((DocumentSnapshot document) {
       Map<String, dynamic>? data = document.data() as Map<String, dynamic>?;
       if (data != null) {
         cliente = Client.fromJson(data);
@@ -77,13 +75,11 @@ class ClienteMapController {
     _clientInfoSubscription?.cancel();
   }
 
-
-  void singOut() async{
+  void singOut() async {
     await _authProvider.signOut();
     // ignore: use_build_context_synchronously
     Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
   }
-
 
   void onMapCreated(GoogleMapController controller) {
     controller.setMapStyle(
@@ -94,24 +90,55 @@ class ClienteMapController {
   void updateLocation() async {
     try {
       await _determinePosition();
-      _position = await Geolocator.getLastKnownPosition();
+      _position = await Geolocator.getLastKnownPosition(); //una unica vez
       centerPosition();
-      addMarker('conductor', _position!.latitude, _position!.longitude,
-          'Tu posicion', '', markerDriver);
-      refresh();
-
-      _positionStream = Geolocator.getPositionStream(
-              desiredAccuracy: LocationAccuracy.best, distanceFilter: 1)
-          .listen((Position position) {
-        _position = position;
-        addMarker('conductor', _position!.latitude, _position!.longitude,
-            'Tu posicion', '', markerDriver);
-        animateCameraToposition(_position!.latitude, _position!.longitude);
-        refresh();
-      });
+      getNearbyDrivers();
     } catch (error) {
       print('Error en la localizacion: $error');
     }
+  }
+
+  void getNearbyDrivers() {
+    Stream<List<DocumentSnapshot>> stream = _geofireProvider.getNearbyDrivers(
+        _position!.latitude, _position!.longitude, 50);
+
+    stream.listen((List<DocumentSnapshot> documentList) {
+      for (DocumentSnapshot d in documentList) {
+        print('DOCUMENT: $d');
+      }
+
+      for (MarkerId m in markers.keys) {
+        bool remove = true;
+
+        for (DocumentSnapshot d in documentList) {
+          if (m.value == d.id) {
+            remove = false;
+          }
+        }
+
+        if (remove) {
+          markers.remove(m);
+          refresh();
+        }
+      }
+
+      for (DocumentSnapshot d in documentList) {
+        Map<String, dynamic> data = d.data() as Map<String, dynamic>;
+        GeoPoint? point = data['position']?['geopoint'];
+        if (point != null) {
+          addMarker(
+            d.id,
+            point.latitude,
+            point.longitude,
+            'Conductor disponible',
+            '',
+            markerDriver,
+          );
+        }
+      }
+
+      refresh();
+    });
   }
 
   void centerPosition() {
@@ -194,5 +221,3 @@ class ClienteMapController {
     markers[id] = marker;
   }
 }
-
-
