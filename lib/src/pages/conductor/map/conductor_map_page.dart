@@ -100,9 +100,7 @@ class _ConductorMapPageState extends State<ConductorMapPage> {
             title: Text('Cerrar sesión'),
             trailing: Icon(Icons.power_settings_new),
            // leading: Icon(Icons.cancel),
-
-           
-
+           onTap: _con.singOut,
           ),
         ],
       ),

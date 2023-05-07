@@ -1,21 +1,21 @@
 import 'dart:async';
-import 'package:farefinder/src/models/conductor.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:farefinder/src/providers/auth_provider.dart';
+import 'package:farefinder/src/providers/client_provider.dart';
 import 'package:farefinder/src/providers/conductor_provider.dart';
 import 'package:farefinder/src/providers/geofire_provider.dart';
 import 'package:farefinder/src/utils/my_progress_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
+import '../../../models/client.dart';
 import 'package:location/location.dart' as location;
 import 'package:farefinder/src/utils/snackbar.dart' as utils;
-import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ConductorMapController {
-  late BuildContext context;
+class ClienteMapController {
+
+ late BuildContext context;
   late Function refresh;
   GlobalKey<ScaffoldState> key = new GlobalKey<ScaffoldState>();
   Completer<GoogleMapController> _mapController = Completer();
@@ -31,36 +31,37 @@ class ConductorMapController {
 
   late GeofireProvider _geofireProvider;
   late AuthProvider _authProvider;
-  late ConductorProvider _conductorProvider;
+   late ConductorProvider _conductorProvider;
+  late ClientProvider _clientProvider;
 
   bool isConnect = false;
   late ProgressDialog _progressDialog;
 
   late StreamSubscription<DocumentSnapshot<Object?>> _statusSuscription;
-  late StreamSubscription<DocumentSnapshot<Object?>> _conductorInfoSuscription;
-  Conductor? conductor;
+  late StreamSubscription<DocumentSnapshot<Object?>> _clientInfoSubscription;
+  Client? cliente;
 
   Future<void> init(BuildContext context, Function refresh) async {
     this.context = context;
     this.refresh = refresh;
     _geofireProvider = new GeofireProvider();
     _authProvider = new AuthProvider();
-    _conductorProvider = new ConductorProvider();
+    _clientProvider = new ClientProvider();
     _progressDialog =
         MyProgressDialog.createProgressDialog(context, 'Conectandose...');
     markerDriver = await createMarkerImageFromAsset('assets/img/uber_car.png');
     checkGPS();
-    getConductorInfo();
+    getClienteInfo();
   }
 
-  void getConductorInfo() {
-    Stream<DocumentSnapshot> conductorstream =
-        _conductorProvider.getByIdStream(_authProvider.getUser()!.uid);
-    _conductorInfoSuscription =
-        conductorstream.listen((DocumentSnapshot document) {
+  void getClienteInfo() {
+    Stream<DocumentSnapshot> clientstream =
+        _clientProvider.getByIdStream(_authProvider.getUser()!.uid);
+    _clientInfoSubscription =
+        clientstream.listen((DocumentSnapshot document) {
       Map<String, dynamic>? data = document.data() as Map<String, dynamic>?;
       if (data != null) {
-        conductor = Conductor.fromJson(data);
+        cliente = Client.fromJson(data);
       }
       refresh();
     });
@@ -73,7 +74,7 @@ class ConductorMapController {
   void dispose() {
     _positionStream?.cancel();
     _statusSuscription?.cancel();
-    _conductorInfoSuscription?.cancel();
+    _clientInfoSubscription?.cancel();
   }
 
 
@@ -90,47 +91,11 @@ class ConductorMapController {
     _mapController.complete(controller);
   }
 
-  void saveLocation() async {
-    await _geofireProvider.create(_authProvider.getUser()!.uid,
-        _position!.latitude, _position!.longitude);
-    _progressDialog.hide();
-  }
-
-  void connect() {
-    if (isConnect) {
-      disconnect();
-    } else {
-      _progressDialog.show;
-      updateLocation();
-    }
-  }
-
-  void disconnect() {
-    _positionStream?.cancel();
-    _geofireProvider.delete(_authProvider.getUser()!.uid);
-  }
-
-  void checkIfIsConnect() {
-    Stream<DocumentSnapshot> status =
-        _geofireProvider.getLocationByIdStream(_authProvider.getUser()!.uid);
-
-    _statusSuscription = status.listen((DocumentSnapshot document) {
-      if (document.exists) {
-        isConnect = true;
-      } else {
-        isConnect = false;
-      }
-
-      refresh();
-    });
-  }
-
   void updateLocation() async {
     try {
       await _determinePosition();
       _position = await Geolocator.getLastKnownPosition();
       centerPosition();
-      saveLocation();
       addMarker('conductor', _position!.latitude, _position!.longitude,
           'Tu posicion', '', markerDriver);
       refresh();
@@ -142,7 +107,6 @@ class ConductorMapController {
         addMarker('conductor', _position!.latitude, _position!.longitude,
             'Tu posicion', '', markerDriver);
         animateCameraToposition(_position!.latitude, _position!.longitude);
-        saveLocation();
         refresh();
       });
     } catch (error) {
@@ -163,13 +127,11 @@ class ConductorMapController {
     if (isLocationEnabled) {
       print('GPS activado');
       updateLocation();
-      checkIfIsConnect();
     } else {
       print('GPS desactivado');
       bool locationGPS = await location.Location().requestService();
       if (locationGPS) {
         updateLocation();
-        checkIfIsConnect();
         print('Activo el GPS');
       }
     }
@@ -232,3 +194,5 @@ class ConductorMapController {
     markers[id] = marker;
   }
 }
+
+
