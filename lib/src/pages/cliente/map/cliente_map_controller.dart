@@ -103,9 +103,11 @@ class ClienteMapController {
         _position!.latitude, _position!.longitude, 10);
 
     stream.listen((List<DocumentSnapshot> documentList) {
-      for (DocumentSnapshot d in documentList) {
+      
+     for (DocumentSnapshot d in documentList) {
         print('DOCUMENT: $d');
       }
+
 
       for (MarkerId m in markers.keys) {
         bool remove = true;
@@ -121,22 +123,11 @@ class ClienteMapController {
           refresh();
         }
       }
-
       for (DocumentSnapshot d in documentList) {
-        Map<String, dynamic> data = d.data() as Map<String, dynamic>;
-        GeoPoint? point = data['position']?['geopoint'];
-        if (point != null) {
-          addMarker(
-            d.id,
-            point.latitude,
-            point.longitude,
-            'conductor_disponible',
-            '',
-            markerDriver,
-          );
-        }
+        GeoPoint point = d['position']['geopoint'];
+        addMarker(d.id, point.latitude, point.longitude, 'Conductor disponible',
+            '', markerDriver);
       }
-
       refresh();
     });
   }
