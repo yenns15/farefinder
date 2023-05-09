@@ -52,7 +52,7 @@ class _ClienteMapPageState extends State<ClienteMapPage> {
       ),
     );
   }
-
+  //icono de localizacion 
   Widget _iconMyLocation() {
     return Image.asset(
       'assets/img/my_location_yellow.png',
@@ -60,7 +60,7 @@ class _ClienteMapPageState extends State<ClienteMapPage> {
       height: 65,
     );
   }
-
+  //contenedor lateral donde estara toda la informacion basica del usuario 
   Widget _drawer() {
     return Drawer(
       child: ListView(
@@ -115,7 +115,7 @@ class _ClienteMapPageState extends State<ClienteMapPage> {
       ),
     );
   }
-
+   //centrar la posicion a la ubicacion actual 
   Widget _buttonCenterPosition() {
     return GestureDetector(
       onTap: _con.centerPosition,
@@ -137,7 +137,7 @@ class _ClienteMapPageState extends State<ClienteMapPage> {
           )),
     );
   }
-
+   //boton para desplzar la barra lateral 
   Widget _buttonDrawer() {
     return Container(
       alignment: Alignment.centerLeft,
@@ -150,7 +150,7 @@ class _ClienteMapPageState extends State<ClienteMapPage> {
       ),
     );
   }
-
+  //boton donde solicitara un servicio
   Widget _ButtonConnect() {
     return Container(
       height: 50,

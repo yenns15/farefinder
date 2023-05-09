@@ -11,11 +11,11 @@ class AuthProvider {
   Future<void> _initFirebaseAuth() async {
     _firebaseAuth = FirebaseAuth.instance;
   }
-
+  //Obtener el usuario actual 
   User? getUser() {
     return _firebaseAuth.currentUser;
   }
-
+  //Comprobar si el usuario está registrado
   bool isSignedIn() {
   final currentUser = FirebaseAuth.instance.currentUser;
 
@@ -26,7 +26,7 @@ class AuthProvider {
   }
 }
 
-
+   //Compruebe si el usuario ha iniciado sesión y rediríjalo a la página adecuada
   void CheckIfUserIsLogged(BuildContext context, String typeUser ){
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user != null){
@@ -44,7 +44,7 @@ class AuthProvider {
       }
      });
   }
-
+  //Iniciar sesión como usuario usando correo electrónico y contraseña
   Future<bool> login(String email, String password) async {
     String? errorMessage;
 
@@ -60,7 +60,7 @@ class AuthProvider {
     }
     return true;
   }
-
+   //Registrar un usuario usando correo electrónico y contraseña
   Future<bool> register(String email, String password) async {
     String? errorMessage;
 
@@ -76,7 +76,7 @@ class AuthProvider {
     }
     return true;
   }
-
+  //Cerrar sesión del usuario actual 
    Future<void> signOut() async {
     await _firebaseAuth.signOut();
   }

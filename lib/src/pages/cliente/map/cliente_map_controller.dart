@@ -52,7 +52,7 @@ class ClienteMapController {
     checkGPS();
     getClienteInfo();
   }
-
+    //obtener ubicacion del cliente
   void getClienteInfo() {
     Stream<DocumentSnapshot> clientstream =
         _clientProvider.getByIdStream(_authProvider.getUser()!.uid);
@@ -68,25 +68,28 @@ class ClienteMapController {
   void openDrawer() {
     key.currentState?.openDrawer();
   }
-
+ //actualiza la informacion contantemente (ubicacion)
   void dispose() {
     _positionStream?.cancel();
     _statusSuscription?.cancel();
     _clientInfoSubscription?.cancel();
   }
 
+  //cerrar session
   void singOut() async {
     await _authProvider.signOut();
     // ignore: use_build_context_synchronously
     Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
   }
 
+  //color del mapa
   void onMapCreated(GoogleMapController controller) {
     controller.setMapStyle(
         '[{"elementType": "geometry","stylers": [{ "color": "#ebe3cd"} ] },{"elementType": "labels.text.fill","stylers": [  { "color": "#523735"}]},{"elementType": "labels.text.stroke","stylers": [{"color": "#f5f1e6"}]}, {"featureType": "administrative","elementType": "geometry.stroke","stylers": [ {"color": "#c9b2a6" }]},{  "featureType": "administrative.land_parcel",  "elementType": "geometry.stroke", "stylers": [ {"color": "#dcd2be"}]},{"featureType": "administrative.land_parcel", "elementType": "labels.text.fill","stylers": [{"color": "#ae9e90"} ]},{"featureType": "landscape.natural","elementType": "geometry","stylers": [{"color": "#dfd2ae"}]},{"featureType": "poi","elementType": "geometry","stylers": [{"color": "#dfd2ae"}]},{"featureType": "poi","elementType": "labels.text.fill","stylers": [{"color": "#93817c"}]},{"featureType": "poi.park","elementType": "geometry.fill","stylers": [{ "color": "#a5b076"}]},{"featureType": "poi.park","elementType": "labels.text.fill","stylers": [{"color": "#447530"}]},{"featureType": "road","elementType": "geometry","stylers": [{"color": "#f5f1e6"}]},{"featureType": "road.arterial","elementType": "geometry","stylers": [{"color": "#fdfcf8"}]},{"featureType": "road.highway","elementType": "geometry","stylers": [{"color": "#f8c967"}]},{"featureType": "road.highway","elementType": "geometry.stroke","stylers": [{"color": "#e9bc62"}]},{"featureType": "road.highway.controlled_access","elementType": "geometry","stylers": [{"color": "#e98d58"}]},{"featureType": "road.highway.controlled_access","elementType": "geometry.stroke","stylers": [{"color": "#db8555"}]},{"featureType": "road.local","elementType": "labels.text.fill","stylers": [{"color": "#806b63"}]},{"featureType": "transit.line","elementType": "geometry","stylers": [{"color": "#dfd2ae"}]},{"featureType": "transit.line","elementType": "labels.text.fill","stylers": [{"color": "#8f7d77"}]},{"featureType": "transit.line","elementType": "labels.text.stroke","stylers": [{"color": "#ebe3cd"}]},{"featureType": "transit.station","elementType": "geometry","stylers": [ {"color": "#dfd2ae"}]},{"featureType": "water","elementType": "geometry.fill","stylers": [{"color": "#b9d3c2"}]},{"featureType": "water", "elementType": "labels.text.fill","stylers": [  {   "color": "#92998d" }]}]');
     _mapController.complete(controller);
   }
 
+  //determina tu posicion
   void updateLocation() async {
     try {
       await _determinePosition();
@@ -98,16 +101,15 @@ class ClienteMapController {
     }
   }
 
+  //con este metodo lo que hacemos es mostrar los conductores disponibles en el mapa de clientes
   void getNearbyDrivers() {
     Stream<List<DocumentSnapshot>> stream = _geofireProvider.getNearbyDrivers(
         _position!.latitude, _position!.longitude, 10);
 
     stream.listen((List<DocumentSnapshot> documentList) {
-      
-     for (DocumentSnapshot d in documentList) {
+      for (DocumentSnapshot d in documentList) {
         print('DOCUMENT: $d');
       }
-
 
       for (MarkerId m in markers.keys) {
         bool remove = true;
@@ -132,6 +134,7 @@ class ClienteMapController {
     });
   }
 
+  //centramos posocion
   void centerPosition() {
     if (_position != null) {
       animateCameraToposition(_position!.latitude, _position!.longitude);
@@ -140,6 +143,7 @@ class ClienteMapController {
     }
   }
 
+  //verificamos que tenga el gps activo
   void checkGPS() async {
     bool isLocationEnabled = await Geolocator.isLocationServiceEnabled();
     if (isLocationEnabled) {
