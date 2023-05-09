@@ -10,10 +10,9 @@ class ClienteMapPage extends StatefulWidget {
 }
 
 class _ClienteMapPageState extends State<ClienteMapPage> {
-
   ClienteMapController _con = new ClienteMapController();
 
-    @override
+  @override
   void initState() {
     super.initState();
     _con.init(context, refresh);
@@ -46,7 +45,7 @@ class _ClienteMapPageState extends State<ClienteMapPage> {
             ),
           ),
           Align(
-            alignment: Alignment.center,
+            //alignment: Alignment.center,
             child: _iconMyLocation(),
           )
         ],
@@ -54,16 +53,13 @@ class _ClienteMapPageState extends State<ClienteMapPage> {
     );
   }
 
-
-   Widget _iconMyLocation() {
+  Widget _iconMyLocation() {
     return Image.asset(
-      'assets/img/my_location.png',
+      'assets/img/my_location_yellow.png',
       width: 65,
       height: 65,
     );
   }
-
-
 
   Widget _drawer() {
     return Drawer(
@@ -77,7 +73,7 @@ class _ClienteMapPageState extends State<ClienteMapPage> {
               children: [
                 Container(
                     child: Text(
-                  _con.cliente?.username?? 'Nombre de usuario',
+                  _con.cliente?.username ?? 'Nombre de usuario',
                   style: TextStyle(
                       fontSize: 18,
                       color: Colors.black,
@@ -100,22 +96,20 @@ class _ClienteMapPageState extends State<ClienteMapPage> {
                 )
               ],
             ),
-            decoration: BoxDecoration(
-              color: Colors.amber
-            ),
+            decoration: BoxDecoration(color: Colors.amber),
           ),
           ListTile(
             title: Text('Editar perfil'),
             trailing: Icon(Icons.edit),
-           // leading: Icon(Icons.cancel),
+            // leading: Icon(Icons.cancel),
 
-            onTap: () { },
+            onTap: () {},
           ),
-           ListTile(
+          ListTile(
             title: Text('Cerrar sesión'),
             trailing: Icon(Icons.power_settings_new),
-           // leading: Icon(Icons.cancel),
-           onTap: _con.singOut,
+            // leading: Icon(Icons.cancel),
+            onTap: _con.singOut,
           ),
         ],
       ),
@@ -163,7 +157,7 @@ class _ClienteMapPageState extends State<ClienteMapPage> {
       alignment: Alignment.bottomCenter,
       margin: EdgeInsets.symmetric(horizontal: 60, vertical: 30),
       child: ElevatedButton(
-        onPressed: (){},
+        onPressed: () {},
         style: ElevatedButton.styleFrom(
           onPrimary: Colors.black,
           primary: _con.isConnect ? Colors.grey[300] : Colors.amber,
@@ -188,4 +182,3 @@ class _ClienteMapPageState extends State<ClienteMapPage> {
     setState(() {});
   }
 }
-
