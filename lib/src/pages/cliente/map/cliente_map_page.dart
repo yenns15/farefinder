@@ -1,4 +1,5 @@
 import 'package:farefinder/src/pages/cliente/map/cliente_map_controller.dart';
+import 'package:farefinder/src/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -35,24 +36,26 @@ class _ClienteMapPageState extends State<ClienteMapPage> {
           SafeArea(
             child: Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [_buttonDrawer(), _buttonCenterPosition()],
-                ),
+                _buttonDrawer(),
+                _cardGooglePlaces(),
+                _buttonChangeTo(),
+                _buttonCenterPosition(),
                 Expanded(child: Container()),
                 _ButtonConnect(),
               ],
             ),
           ),
           Align(
-            //alignment: Alignment.center,
+            //tener en cuenta
+            alignment: Alignment.center,
             child: _iconMyLocation(),
           )
         ],
       ),
     );
   }
-  //icono de localizacion 
+
+  //icono de localizacion
   Widget _iconMyLocation() {
     return Image.asset(
       'assets/img/my_location_yellow.png',
@@ -60,7 +63,8 @@ class _ClienteMapPageState extends State<ClienteMapPage> {
       height: 65,
     );
   }
-  //contenedor lateral donde estara toda la informacion basica del usuario 
+
+  //contenedor lateral donde estara toda la informacion basica del usuario
   Widget _drawer() {
     return Drawer(
       child: ListView(
@@ -115,13 +119,14 @@ class _ClienteMapPageState extends State<ClienteMapPage> {
       ),
     );
   }
-   //centrar la posicion a la ubicacion actual 
+
+  //centrar la posicion a la ubicacion actual
   Widget _buttonCenterPosition() {
     return GestureDetector(
       onTap: _con.centerPosition,
       child: Container(
           alignment: Alignment.centerRight,
-          margin: EdgeInsets.symmetric(horizontal: 10),
+          margin: EdgeInsets.symmetric(horizontal: 18),
           child: Card(
             shape: CircleBorder(),
             color: Colors.white,
@@ -137,7 +142,30 @@ class _ClienteMapPageState extends State<ClienteMapPage> {
           )),
     );
   }
-   //boton para desplzar la barra lateral 
+
+  Widget _buttonChangeTo() {
+    return GestureDetector(
+      onTap: _con.changeFromTO,
+      child: Container(
+          alignment: Alignment.centerRight,
+          margin: EdgeInsets.symmetric(horizontal: 18),
+          child: Card(
+            shape: CircleBorder(),
+            color: Colors.white,
+            elevation: 4.0,
+            child: Container(
+              padding: EdgeInsets.all(10),
+              child: Icon(
+                Icons.refresh,
+                color: Colors.grey[600],
+                size: 20,
+              ),
+            ),
+          )),
+    );
+  }
+
+  //boton para desplzar la barra lateral
   Widget _buttonDrawer() {
     return Container(
       alignment: Alignment.centerLeft,
@@ -145,11 +173,12 @@ class _ClienteMapPageState extends State<ClienteMapPage> {
         onPressed: _con.openDrawer,
         icon: Icon(
           Icons.menu,
-          color: Colors.white,
+          color: Colors.black,
         ),
       ),
     );
   }
+
   //boton donde solicitara un servicio
   Widget _ButtonConnect() {
     return Container(
@@ -175,6 +204,61 @@ class _ClienteMapPageState extends State<ClienteMapPage> {
       myLocationEnabled: false,
       myLocationButtonEnabled: false,
       markers: Set<Marker>.of(_con.markers.values),
+      onCameraMove: (position) {
+        _con.initialPosition = position;
+        print('ON CAMERA MOVE: $position');
+      },
+      onCameraIdle: () async {
+        await _con.setLocationDraggableInfo();
+      },
+    );
+  }
+
+  //tarjeta de direcciones
+  Widget _cardGooglePlaces() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.9,
+      child: Material(
+        color: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Desde',
+                style: TextStyle(color: Colors.grey, fontSize: 10),
+              ),
+              Text(
+                _con.from ?? '',
+                style: TextStyle(color: Colors.black, fontSize: 14),
+                maxLines: 2,
+              ),
+              SizedBox(height: 5),
+              Container(
+                width: double.infinity,
+                child: Divider(
+                  color: Colors.grey,
+                  height: 10,
+                ),
+              ),
+              SizedBox(height: 5),
+              Text(
+                'Hasta',
+                style: TextStyle(color: Colors.grey, fontSize: 10),
+              ),
+              Text(
+                _con.to ?? '',
+                style: TextStyle(color: Colors.black, fontSize: 14),
+                maxLines: 2,
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 

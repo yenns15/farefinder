@@ -12,6 +12,10 @@ import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import '../../../models/client.dart';
 import 'package:location/location.dart' as location;
 import 'package:farefinder/src/utils/snackbar.dart' as utils;
+import 'package:geocode/geocode.dart';
+import 'package:geocoding/geocoding.dart';
+
+
 
 class ClienteMapController {
   late BuildContext context;
@@ -40,6 +44,14 @@ class ClienteMapController {
   late StreamSubscription<DocumentSnapshot<Object?>> _clientInfoSubscription;
   Client? cliente;
 
+  String? from;
+  LatLng? fromLatLng;
+
+  String? to;
+  LatLng? toLatLng;
+
+  bool isFromSelected = true;
+
   Future<void> init(BuildContext context, Function refresh) async {
     this.context = context;
     this.refresh = refresh;
@@ -52,7 +64,8 @@ class ClienteMapController {
     checkGPS();
     getClienteInfo();
   }
-    //obtener ubicacion del cliente
+
+  //obtener ubicacion del cliente
   void getClienteInfo() {
     Stream<DocumentSnapshot> clientstream =
         _clientProvider.getByIdStream(_authProvider.getUser()!.uid);
@@ -68,7 +81,8 @@ class ClienteMapController {
   void openDrawer() {
     key.currentState?.openDrawer();
   }
- //actualiza la informacion contantemente (ubicacion)
+
+  //actualiza la informacion contantemente (ubicacion)
   void dispose() {
     _positionStream?.cancel();
     _statusSuscription?.cancel();
@@ -98,6 +112,50 @@ class ClienteMapController {
       getNearbyDrivers();
     } catch (error) {
       print('Error en la localizacion: $error');
+    }
+  }
+
+  void changeFromTO() {
+    isFromSelected = !isFromSelected;
+
+    if (isFromSelected) {
+      utils.Snackbar.showSnackbar(
+          context, key, 'Estas seleccionando el lugar de recogida');
+    } else {
+      utils.Snackbar.showSnackbar(
+          context, key, 'Estas seleccionando el destino');
+    }
+  }
+
+ 
+
+  //establecer la información de ubicación de un marcador que se puede arrastrar en un mapa.
+  Future<Null> setLocationDraggableInfo() async {
+    if (initialPosition != null) {
+      double lat = initialPosition.target.latitude;
+      double lng = initialPosition.target.longitude;
+
+      List<Placemark> address = await placemarkFromCoordinates(lat, lng);
+
+      if (address != null) {
+        if (address.length > 0) {
+          String? direction = address[0].thoroughfare;
+          String? street = address[0].subThoroughfare;
+          String? city = address[0].locality;
+          String? department = address[0].administrativeArea;
+          String? country = address[0].country;
+
+          if (isFromSelected) {
+            from = '$direction #$street, $city, $department';
+            fromLatLng = new LatLng(lat, lng);
+          } else {
+            to = '$direction #$street, $city, $department';
+            toLatLng = new LatLng(lat, lng);
+          }
+
+          refresh();
+        }
+      }
     }
   }
 
