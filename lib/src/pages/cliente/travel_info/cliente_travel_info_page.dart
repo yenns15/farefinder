@@ -43,11 +43,11 @@ class _ClienteTravelInfoPageState extends State<ClienteTravelInfoPage> {
         alignment: Alignment.topLeft,
       ),
        Align(
-        child: _cardKmInfo('0 Km'),
+        child: _cardKmInfo(_con.km),
         alignment: Alignment.topRight,
       ),
        Align(
-        child: _cardMinInfo('0 Min'),
+        child: _cardMinInfo(_con.min),
         alignment: Alignment.topRight,
       )
         ],
@@ -74,7 +74,7 @@ class _ClienteTravelInfoPageState extends State<ClienteTravelInfoPage> {
               ),
             ),
             subtitle: Text(
-              'Direccion',
+              _con.from ?? '',
               style: TextStyle(
                 fontSize: 13
               ),
@@ -89,7 +89,7 @@ class _ClienteTravelInfoPageState extends State<ClienteTravelInfoPage> {
               ),
             ),
             subtitle: Text(
-              'Direccion',
+              _con.to ?? '',
               style: TextStyle(
                   fontSize: 13
               ),
@@ -129,14 +129,14 @@ class _ClienteTravelInfoPageState extends State<ClienteTravelInfoPage> {
    Widget _cardKmInfo(String km) {
     return SafeArea(
         child: Container(
-          width: 100,
+          width: 110,
           padding: EdgeInsets.symmetric(horizontal: 30),
           margin: EdgeInsets.only(right: 10, top: 10),
           decoration: BoxDecoration(
             color: Colors.amber,
             borderRadius: BorderRadius.all(Radius.circular(20))
           ),
-          child: Text(km ?? '0 Km'),
+          child: Text(km ?? '0 Km',maxLines: 1,),
         )
     );
   }
@@ -144,14 +144,14 @@ class _ClienteTravelInfoPageState extends State<ClienteTravelInfoPage> {
   Widget _cardMinInfo(String min) {
     return SafeArea(
         child: Container(
-          width: 100,
+          width: 110,
           padding: EdgeInsets.symmetric(horizontal: 30),
           margin: EdgeInsets.only(right: 10, top: 35),
           decoration: BoxDecoration(
             color: Colors.yellow,
             borderRadius: BorderRadius.all(Radius.circular(20))
           ),
-          child: Text(min ?? '0 Min'),
+          child: Text(min ?? '0 Min',maxLines: 1,),
         )
     );
   }

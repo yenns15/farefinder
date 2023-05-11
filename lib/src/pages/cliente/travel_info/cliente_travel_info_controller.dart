@@ -1,13 +1,15 @@
 import 'dart:async';
 
 import 'package:farefinder/src/api/environment.dart';
+import 'package:farefinder/src/models/directions.dart';
+import 'package:farefinder/src/providers/google_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class ClienteTravelInfoController {
   late BuildContext context;
-
+  late GoogleProvider _googleProvider;
   late Function refresh;
   GlobalKey<ScaffoldState> key = new GlobalKey<ScaffoldState>();
   Completer<GoogleMapController> _mapController = Completer();
@@ -29,6 +31,10 @@ class ClienteTravelInfoController {
   late BitmapDescriptor fromMarker;
   late BitmapDescriptor toMarker;
 
+  late Direction _directions;
+  late String min;
+  late String km;
+
   Future<void> init(BuildContext context, Function refresh) async {
     this.context = context;
     this.refresh = refresh;
@@ -39,12 +45,34 @@ class ClienteTravelInfoController {
     to = arguments['to'];
     fromLatLng = arguments['fromLatLng'];
     toLatLng = arguments['toLatLng'];
+     
+   _googleProvider = new GoogleProvider();
 
     fromMarker = await createMarkerImageFromAsset('assets/img/map_pin_red.png');
     toMarker = await createMarkerImageFromAsset('assets/img/map_pin_blue.png');
 
     animateCameraToposition(fromLatLng.latitude, fromLatLng.longitude);
+    getGoogleMapsDirections(fromLatLng, toLatLng);
   }
+
+
+
+    void getGoogleMapsDirections(LatLng from, LatLng to) async {
+    _directions = await _googleProvider.getGoogleMapsDirections(
+        from.latitude,
+        from.longitude,
+        to.latitude,
+        to.longitude
+    );
+    min = _directions.duration.text;
+    km = _directions.distance.text;
+
+    print('KM: $km');
+    print('MIN: $min');
+
+    refresh();
+  }
+
 
   Future<void> setPolylines() async {
     PointLatLng pointFromLatLng =
@@ -58,10 +86,10 @@ class ClienteTravelInfoController {
     for (PointLatLng point in result.points) {
       points.add(LatLng(point.latitude, point.longitude));
     }
-    //aca podemos cambiar el color de la rita
+    //aca podemos cambiar el color de la ruta
     Polyline polyline = Polyline(
         polylineId: PolylineId('poly'),
-        color: Colors.amber,
+        color: Colors.green,
         points: points,
         width: 6);
 
