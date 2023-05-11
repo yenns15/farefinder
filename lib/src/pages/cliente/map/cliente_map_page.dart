@@ -1,6 +1,7 @@
 import 'package:farefinder/src/pages/cliente/map/cliente_map_controller.dart';
 import 'package:farefinder/src/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class ClienteMapPage extends StatefulWidget {
@@ -16,7 +17,10 @@ class _ClienteMapPageState extends State<ClienteMapPage> {
   @override
   void initState() {
     super.initState();
-    _con.init(context, refresh);
+    
+     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+      _con.init(context, refresh);
+    });
   }
 
   void dispose() {
@@ -186,7 +190,7 @@ class _ClienteMapPageState extends State<ClienteMapPage> {
       alignment: Alignment.bottomCenter,
       margin: EdgeInsets.symmetric(horizontal: 60, vertical: 30),
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: _con.requestDriver,
         style: ElevatedButton.styleFrom(
           onPrimary: Colors.black,
           primary: _con.isConnect ? Colors.grey[300] : Colors.amber,
@@ -228,15 +232,9 @@ class _ClienteMapPageState extends State<ClienteMapPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Desde',
-                style: TextStyle(color: Colors.grey, fontSize: 10),
-              ),
-              Text(
-                _con.from ?? '',
-                style: TextStyle(color: Colors.black, fontSize: 14),
-                maxLines: 2,
-              ),
+              _infoCardLocation('Desde', _con.from ?? 'Lugar de recogida', () async {
+                await _con.showGoogleAutoComplete(true);
+              }),
               SizedBox(height: 5),
               Container(
                 width: double.infinity,
@@ -246,21 +244,39 @@ class _ClienteMapPageState extends State<ClienteMapPage> {
                 ),
               ),
               SizedBox(height: 5),
-              Text(
-                'Hasta',
-                style: TextStyle(color: Colors.grey, fontSize: 10),
-              ),
-              Text(
-                _con.to ?? '',
-                style: TextStyle(color: Colors.black, fontSize: 14),
-                maxLines: 2,
-              ),
+              _infoCardLocation('Hasta', _con.to ?? 'Lugar de destino', () async {
+                await _con.showGoogleAutoComplete(false);
+              }),
             ],
           ),
         ),
       ),
     );
   }
+
+
+
+  Widget _infoCardLocation(String title, String value, void Function() function) {
+  return GestureDetector(
+    onTap: function,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: TextStyle(color: Colors.grey, fontSize: 10),
+          textAlign: TextAlign.start,
+        ),
+        Text(
+          value,
+          style: TextStyle(color: Colors.black, fontSize: 14),
+          maxLines: 2,
+        ),
+      ],
+    ),
+  );
+}
+
 
   void refresh() {
     setState(() {});
