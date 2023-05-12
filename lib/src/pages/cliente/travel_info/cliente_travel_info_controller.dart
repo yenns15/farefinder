@@ -3,13 +3,17 @@ import 'dart:async';
 import 'package:farefinder/src/api/environment.dart';
 import 'package:farefinder/src/models/directions.dart';
 import 'package:farefinder/src/providers/google_provider.dart';
+import 'package:farefinder/src/providers/prices_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:farefinder/src/models/prices.dart';
 
 class ClienteTravelInfoController {
   late BuildContext context;
   late GoogleProvider _googleProvider;
+  late PricesProvider _pricesProvider;
+
   late Function refresh;
   GlobalKey<ScaffoldState> key = new GlobalKey<ScaffoldState>();
   Completer<GoogleMapController> _mapController = Completer();
@@ -27,13 +31,15 @@ class ClienteTravelInfoController {
   Set<Polyline> polylines = {};
   List<LatLng> points = [];
 
-
   late BitmapDescriptor fromMarker;
   late BitmapDescriptor toMarker;
 
   late Direction _directions;
   late String min;
   late String km;
+
+  late double minTotal;
+  late double maxTotal;
 
   Future<void> init(BuildContext context, Function refresh) async {
     this.context = context;
@@ -45,8 +51,9 @@ class ClienteTravelInfoController {
     to = arguments['to'];
     fromLatLng = arguments['fromLatLng'];
     toLatLng = arguments['toLatLng'];
-     
-   _googleProvider = new GoogleProvider();
+
+    _googleProvider = new GoogleProvider();
+    _pricesProvider = new PricesProvider();
 
     fromMarker = await createMarkerImageFromAsset('assets/img/map_pin_red.png');
     toMarker = await createMarkerImageFromAsset('assets/img/map_pin_blue.png');
@@ -55,24 +62,31 @@ class ClienteTravelInfoController {
     getGoogleMapsDirections(fromLatLng, toLatLng);
   }
 
-
-
-    void getGoogleMapsDirections(LatLng from, LatLng to) async {
+  void getGoogleMapsDirections(LatLng from, LatLng to) async {
     _directions = await _googleProvider.getGoogleMapsDirections(
-        from.latitude,
-        from.longitude,
-        to.latitude,
-        to.longitude
-    );
+        from.latitude, from.longitude, to.latitude, to.longitude);
     min = _directions.duration.text;
     km = _directions.distance.text;
 
     print('KM: $km');
     print('MIN: $min');
 
+    calculatePrice();
+
     refresh();
   }
 
+  void calculatePrice() async {
+    Prices prices = await _pricesProvider.getAll();
+    double kmValue = double.parse(km.split(" ")[0]) * prices.km;
+    double minValue = double.parse(min.split(" ")[0]) * prices.min;
+    double total = kmValue + minValue;
+
+    minTotal = total - 0.5;
+    maxTotal = total + 0.5;
+
+    refresh();
+  }
 
   Future<void> setPolylines() async {
     PointLatLng pointFromLatLng =
@@ -95,16 +109,15 @@ class ClienteTravelInfoController {
 
     polylines.add(polyline);
 
-    addMarker('from', fromLatLng.latitude, fromLatLng.longitude, 'Lugar de recogida',
-        '', fromMarker);
+    addMarker('from', fromLatLng.latitude, fromLatLng.longitude,
+        'Lugar de recogida', '', fromMarker);
     addMarker(
         'to', toLatLng.latitude, toLatLng.longitude, 'Destino', '', toMarker);
 
     refresh();
   }
 
-
-    Future animateCameraToposition(double latitude, double longitude) async {
+  Future animateCameraToposition(double latitude, double longitude) async {
     GoogleMapController controller = await _mapController.future;
     if (controller != null) {
       controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
@@ -119,9 +132,7 @@ class ClienteTravelInfoController {
     await setPolylines();
   }
 
-
-
- Future<BitmapDescriptor> createMarkerImageFromAsset(String path) async {
+  Future<BitmapDescriptor> createMarkerImageFromAsset(String path) async {
     ImageConfiguration configuration = ImageConfiguration();
     BitmapDescriptor bitmapDescriptor =
         await BitmapDescriptor.fromAssetImage(configuration, path);
@@ -139,5 +150,4 @@ class ClienteTravelInfoController {
     );
     markers[id] = marker;
   }
-
 }
