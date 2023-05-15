@@ -1,10 +1,12 @@
 import 'package:farefinder/src/pages/cliente/map/cliente_map_page.dart';
 import 'package:farefinder/src/pages/cliente/register/cliente_register_page.dart';
 import 'package:farefinder/src/pages/cliente/travel_info/cliente_travel_info_page.dart';
+import 'package:farefinder/src/pages/cliente/travel_request/cliente_travel_request_page.dart';
 import 'package:farefinder/src/pages/conductor/map/conductor_map_page.dart';
 import 'package:farefinder/src/pages/conductor/register/conductor_register_page.dart';
 import 'package:farefinder/src/pages/home/home_page.dart';
 import 'package:farefinder/src/pages/login/login_page.dart';
+import 'package:farefinder/src/providers/push_notifications_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -32,7 +34,24 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
+
 class _MyAppState extends State<MyApp> {
+
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    PushNotificationsProvider pushNotificationsProvider = new PushNotificationsProvider();
+    pushNotificationsProvider.initPushNotifications();
+
+  }
+
+ 
+
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -51,7 +70,8 @@ class _MyAppState extends State<MyApp> {
         'conductor/register': (BuildContext context) => ConductorRegisterPage(),
         'conductor/map': (BuildContext context) => ConductorMapPage(),
         'cliente/map': (BuildContext context) => ClienteMapPage(),
-        'cliente/travel/info': (BuildContext context) => ClienteTravelInfoPage()
+        'cliente/travel/info': (BuildContext context) => ClienteTravelInfoPage(),
+        'cliente/travel/request': (BuildContext context) => ClienteTravelRequestPage()
       },
     );
   }

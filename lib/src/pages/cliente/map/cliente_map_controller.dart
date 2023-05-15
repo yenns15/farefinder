@@ -237,7 +237,7 @@ class ClienteMapController {
       for (DocumentSnapshot d in documentList) {
         GeoPoint point = d['position']['geopoint'];
         addMarker(d.id, point.latitude, point.longitude, 'Conductor disponible',
-            '', markerDriver);
+            d.id, markerDriver);
       }
       refresh();
     });

@@ -100,7 +100,7 @@ class _ClienteTravelInfoPageState extends State<ClienteTravelInfoPage> {
           Container(
             margin: EdgeInsets.symmetric(horizontal: 30),
             child: ButtonApp(
-              onPressed: () {},
+              onPressed: _con.goToRequest,
               text: 'CONFIRMAR',
               textColor: Colors.black,
               color: Colors.amber,
