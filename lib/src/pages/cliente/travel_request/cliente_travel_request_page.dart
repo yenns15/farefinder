@@ -42,6 +42,7 @@ class _ClienteTravelRequestPageState extends State<ClienteTravelRequestPage> {
           _lottieAnimation(),
           _textLookingFor(),
           _textCounter(),
+          _buttonCancel()
         ],
       ),
       bottomNavigationBar: _buttonCancel(),

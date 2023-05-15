@@ -90,7 +90,7 @@ class ClienteTravelInfoController {
     double kmValue = double.parse(km!.split(" ")[0]) * prices.km;
     double total = kmValue;
 
-    minTotal = total - 1.094;
+    minTotal = total;
     maxTotal = total + 1.178;
 
     refresh();
