@@ -91,7 +91,7 @@ class _ClienteTravelInfoPageState extends State<ClienteTravelInfoPage> {
               style: TextStyle(fontSize: 15),
             ),
             subtitle: Text(
-              '${_con.minTotal?.toStringAsFixed(3) ?? '0.00'}\$ - ${_con.maxTotal?.toStringAsFixed(3) ?? '0.00'}\$',
+              '\COP ${_con.minTotal?.toStringAsFixed(3) ?? '0.00'} - \COP ${_con.maxTotal?.toStringAsFixed(3) ?? '0.00'}',
               style: TextStyle(fontSize: 13),
               maxLines: 1,
             ),

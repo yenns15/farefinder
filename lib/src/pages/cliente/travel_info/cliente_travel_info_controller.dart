@@ -12,7 +12,7 @@ import 'package:farefinder/src/models/prices.dart';
 class ClienteTravelInfoController {
   late BuildContext context;
   late GoogleProvider _googleProvider;
-   PricesProvider? _pricesProvider;
+  PricesProvider? _pricesProvider;
 
   late Function refresh;
   GlobalKey<ScaffoldState> key = new GlobalKey<ScaffoldState>();
@@ -76,23 +76,19 @@ class ClienteTravelInfoController {
     refresh();
   }
 
-
-   void goToRequest() {
+  void goToRequest() {
     Navigator.pushNamed(context, 'cliente/travel/request', arguments: {
-        'from': from,
-        'to': to,
-        'fromLatLng': fromLatLng,
-        'toLatLng': toLatLng,
-      });
+      'from': from,
+      'to': to,
+      'fromLatLng': fromLatLng,
+      'toLatLng': toLatLng,
+    });
   }
-
-
 
   void calculatePrice() async {
     Prices prices = await _pricesProvider!.getAll();
     double kmValue = double.parse(km!.split(" ")[0]) * prices.km;
-    double minValue = double.parse(min!.split(" ")[0]) * prices.min;
-    double total = kmValue + minValue;
+    double total = kmValue;
 
     minTotal = total - 1.094;
     maxTotal = total + 1.178;
