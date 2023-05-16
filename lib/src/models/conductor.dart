@@ -11,6 +11,7 @@ class Conductor {
         required this.email,
         required this.password,
         required this.plate,
+        required this.token
     });
 
     String id;
@@ -18,6 +19,7 @@ class Conductor {
     String email;
     String password;
     String plate;
+    String token;
 
     factory Conductor.fromJson(Map<String, dynamic> json) => Conductor(
         id: json["id"]??'',
@@ -25,6 +27,8 @@ class Conductor {
         email: json["email"]??'',
         password: json["password"]??'',
         plate: json["plate"],
+        token: json["token"],
+
     );
 
     Map<String, dynamic> toJson() => {
@@ -32,5 +36,6 @@ class Conductor {
         "username": username,
         "email": email,
         "plate": plate,
+         "token": token,
     };
 }

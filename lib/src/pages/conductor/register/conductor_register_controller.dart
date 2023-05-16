@@ -85,7 +85,8 @@ class ConductorRegisterController {
               email: user.email?.trim() ?? '',
               username: username,
               password: password,
-              plate : plate
+              plate : plate, 
+              token: ''
               );
 
           await _conductorProvider.create(conductor);
