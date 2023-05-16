@@ -143,21 +143,27 @@ class _ClienteTravelInfoPageState extends State<ClienteTravelInfoPage> {
     ));
   }
 
-  Widget _buttonBack() {
-    return SafeArea(
-      child: Container(
-        margin: EdgeInsets.only(left: 10),
-        child: CircleAvatar(
-          radius: 20,
-          backgroundColor: Colors.white,
-          child: Icon(
+Widget _buttonBack() {
+  return SafeArea(
+    child: Container(
+      margin: EdgeInsets.only(left: 10),
+      child: CircleAvatar(
+        radius: 20,
+        backgroundColor: Colors.white,
+        child: IconButton(
+          icon: Icon(
             Icons.arrow_back,
             color: Colors.black,
           ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
       ),
-    );
-  }
+    ),
+  );
+}
+
 
   Widget _googleMapsWidget() {
     return GoogleMap(

@@ -3,6 +3,7 @@ import 'package:farefinder/src/models/conductor.dart';
 import 'package:farefinder/src/providers/auth_provider.dart';
 import 'package:farefinder/src/providers/conductor_provider.dart';
 import 'package:farefinder/src/providers/geofire_provider.dart';
+import 'package:farefinder/src/providers/push_notifications_provider.dart';
 import 'package:farefinder/src/utils/my_progress_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -32,6 +33,7 @@ class ConductorMapController {
   late GeofireProvider _geofireProvider;
   late AuthProvider _authProvider;
   late ConductorProvider _conductorProvider;
+  late PushNotificationsProvider _pushNotificationsProvider;
 
   bool isConnect = false;
   late ProgressDialog _progressDialog;
@@ -46,10 +48,12 @@ class ConductorMapController {
     _geofireProvider = new GeofireProvider();
     _authProvider = new AuthProvider();
     _conductorProvider = new ConductorProvider();
+    _pushNotificationsProvider = new PushNotificationsProvider();
     _progressDialog =
         MyProgressDialog.createProgressDialog(context, 'Conectandose...');
     markerDriver = await createMarkerImageFromAsset('assets/img/uber_car.png');
     checkGPS();
+    saveToken();
     getConductorInfo();
   }
 
@@ -66,6 +70,10 @@ class ConductorMapController {
     });
   }
 
+  void saveToken() {
+    _pushNotificationsProvider.saveToken(_authProvider.getUser()!.uid, 'Drivers');
+  }
+
   void openDrawer() {
     key.currentState?.openDrawer();
   }
@@ -76,13 +84,11 @@ class ConductorMapController {
     _conductorInfoSuscription?.cancel();
   }
 
-
-  void singOut() async{
+  void singOut() async {
     await _authProvider.signOut();
     // ignore: use_build_context_synchronously
     Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
   }
-
 
   void onMapCreated(GoogleMapController controller) {
     controller.setMapStyle(

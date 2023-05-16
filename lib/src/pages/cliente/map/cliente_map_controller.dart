@@ -5,6 +5,7 @@ import 'package:farefinder/src/providers/auth_provider.dart';
 import 'package:farefinder/src/providers/client_provider.dart';
 import 'package:farefinder/src/providers/conductor_provider.dart';
 import 'package:farefinder/src/providers/geofire_provider.dart';
+import 'package:farefinder/src/providers/push_notifications_provider.dart';
 import 'package:farefinder/src/utils/my_progress_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -18,7 +19,6 @@ import 'package:geocode/geocode.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_webservice/places.dart' as places;
 import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart';
-//import 'package:flutter_google_places_sdk/flutter_google_places_sdk.dart' as mapa;
 
 class ClienteMapController {
   late BuildContext context;
@@ -39,6 +39,7 @@ class ClienteMapController {
   late AuthProvider _authProvider;
   late ConductorProvider _conductorProvider;
   late ClientProvider _clientProvider;
+  late PushNotificationsProvider _pushNotificationsProvider;
 
   bool isConnect = false;
   late ProgressDialog _progressDialog;
@@ -63,10 +64,12 @@ class ClienteMapController {
     _geofireProvider = new GeofireProvider();
     _authProvider = new AuthProvider();
     _clientProvider = new ClientProvider();
+    _pushNotificationsProvider = new PushNotificationsProvider();
     _progressDialog =
         MyProgressDialog.createProgressDialog(context, 'Conectandose...');
     markerDriver = await createMarkerImageFromAsset('assets/img/uber_car.png');
     checkGPS();
+    saveToken();
     getClienteInfo();
   }
 
@@ -208,6 +211,11 @@ class ClienteMapController {
         }
       }
     }
+  }
+
+  void saveToken() {
+    _pushNotificationsProvider.saveToken(
+        _authProvider.getUser()!.uid, 'Clients');
   }
 
   //con este metodo lo que hacemos es mostrar los conductores disponibles en el mapa de clientes

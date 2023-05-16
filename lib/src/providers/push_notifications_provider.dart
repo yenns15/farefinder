@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:farefinder/src/providers/client_provider.dart';
+import 'package:farefinder/src/providers/conductor_provider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 class PushNotificationsProvider {
@@ -32,7 +34,24 @@ class PushNotificationsProvider {
 
     print('Configuraciones para iOS fueron registradas ${await _firebaseMessaging.getNotificationSettings()}');
   }
+    
+ void saveToken(String idUser, String typeUser) async {
+    String? token = await _firebaseMessaging.getToken();
+    Map<String, dynamic> data = {
+      'token': token
+    };
 
+    if (typeUser == 'Clients') {
+      ClientProvider clientProvider = new ClientProvider();
+      clientProvider.update(data, idUser);
+    }
+    else {
+      ConductorProvider conductorProvider = new ConductorProvider();
+      conductorProvider.update(data, idUser);
+    }
+
+  }
+    
   Future<void> dispose() async {
     await _streamController.close();
   }
