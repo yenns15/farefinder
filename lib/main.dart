@@ -62,7 +62,9 @@ class _MyAppState extends State<MyApp> {
       initialRoute: 'home',
       theme: ThemeData(
         fontFamily: 'NimbusSans',
-        appBarTheme: AppBarTheme(elevation: 0),
+        appBarTheme: AppBarTheme(
+          elevation: 0
+        ),
         // primaryColor: utils.colors.farefinder
       ),
       routes: {

@@ -45,6 +45,7 @@ class _ClienteTravelRequestPageState extends State<ClienteTravelRequestPage> {
         ],
       ),
       bottomNavigationBar: _buttonCancel(),
+      floatingActionButton: FloatingActionButton(onPressed: () {}),
     );
   }
 

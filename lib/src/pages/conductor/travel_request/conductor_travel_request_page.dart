@@ -33,11 +33,12 @@ class _ConductorTravelRequestPageState
         children: [
           _bannerClientInfo(),
           _textFromTo(
-              'Carrera falsa con calle falsa', 'Carrera falsa con calle falsa'),
+              'Lugar de origen ', 'Lugar de destino '),
           _textTimeLimit(),
+          _buttonsAction() 
         ],
       ),
-      bottomNavigationBar: _buttonsAction(),
+   //   bottomNavigationBar: _buttonsAction(),
     );
   }
 
