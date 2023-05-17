@@ -59,7 +59,7 @@ class PushNotificationsProvider {
       'https://fcm.googleapis.com/fcm/send' as Uri,
       headers: <String, String> {
         'Content-Type': 'application/json',
-        'Authorization': 'key=BJZL9LkJkG6NzdmJdKGt57n-xu6fRFbIY52Ocr9m9wAFF7xZDsvvQiMXW0IbCjNhP0MeWZctzlMJVZmKkf3zuL4'
+        'Authorization': 'key=AAAA00RPKpU:APA91bE5GhPETrywnvLBgru6sndJ0pJ812c355xFkgcQ_APTmRYVoOGIEyG4RnsCyfvjhRyld-IctAItUGXa1mwGnaF_RjjCL_YBRAROwNmmWfBju3iDzBRzWTWh9Y8pIiuBVjceIGya'
       },
       body: jsonEncode(
         <String, dynamic> {
