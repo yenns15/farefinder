@@ -84,23 +84,11 @@ class ClienteTravelRequestController {
     await _travelInfoProvider.create(travelInfo);
   }
 
- Future<void> getDriverInfo(String? idConductor) async {
-  if (idConductor != null) {
+
+ Future<void> getDriverInfo(String idConductor) async {
     Conductor? conductor = await _conductorProvider.getById(idConductor);
-    if (conductor != null) {
-      _sendNotification(conductor.token);
-    } else {
-      print('Conductor not found');
-    }
-  } else {
-    print('Invalid conductor id');
+    _sendNotification(conductor!.token);
   }
-}
-
-
-
-
-
 
   void _sendNotification(String token) {
     print('TOKEN: $token');

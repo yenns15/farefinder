@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:farefinder/src/providers/client_provider.dart';
 import 'package:farefinder/src/providers/conductor_provider.dart';
+import 'package:farefinder/src/utils/shared_pref.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 
@@ -34,61 +35,52 @@ class PushNotificationsProvider {
       provisional: true,
     );
 
-    print('Configuraciones para iOS fueron registradas ${await _firebaseMessaging.getNotificationSettings()}');
+    print(
+        'Configuraciones para iOS fueron registradas ${await _firebaseMessaging.getNotificationSettings()}');
   }
-    
- void saveToken(String idUser, String typeUser) async {
+
+  void saveToken(String idUser, String typeUser) async {
     String? token = await _firebaseMessaging.getToken();
-    Map<String, dynamic> data = {
-      'token': token
-    };
+    Map<String, dynamic> data = {'token': token};
 
     if (typeUser == 'Clients') {
       ClientProvider clientProvider = new ClientProvider();
       clientProvider.update(data, idUser);
-    }
-    else {
+    } else {
       ConductorProvider conductorProvider = new ConductorProvider();
       conductorProvider.update(data, idUser);
     }
-
   }
 
-   Future<void> sendMessage(String to, Map<String, dynamic> data, String title, String body) async {
-    await http.post(
-      'https://fcm.googleapis.com/fcm/send' as Uri,
-      headers: <String, String> {
-        'Content-Type': 'application/json',
-        'Authorization': 'key=AAAA00RPKpU:APA91bE5GhPETrywnvLBgru6sndJ0pJ812c355xFkgcQ_APTmRYVoOGIEyG4RnsCyfvjhRyld-IctAItUGXa1mwGnaF_RjjCL_YBRAROwNmmWfBju3iDzBRzWTWh9Y8pIiuBVjceIGya'
-      },
-      body: jsonEncode(
-        <String, dynamic> {
-          'notification': <String, dynamic> {
-            'body': 'Este es el contenido',
-            'title': 'Este es el titulo',
+  Future<void> sendMessage(
+      String to, Map<String, dynamic> data, String title, String body) async {
+    await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization':
+              'key=AAAA00RPKpU:APA91bE5GhPETrywnvLBgru6sndJ0pJ812c355xFkgcQ_APTmRYVoOGIEyG4RnsCyfvjhRyld-IctAItUGXa1mwGnaF_RjjCL_YBRAROwNmmWfBju3iDzBRzWTWh9Y8pIiuBVjceIGya'
+        },
+        body: jsonEncode(<String, dynamic>{
+          'notification': <String, dynamic>{
+            'body': body,
+            'title': title,
           },
           'priority': 'high',
           'ttl': '4500s',
           'data': data,
           'to': to
-        }
-      )
-    );
+        }));
   }
 
-
-
-
-
-
-    
   Future<void> dispose() async {
     await _streamController.close();
   }
 
-  Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  Future<void> _firebaseMessagingBackgroundHandler(
+      RemoteMessage message) async {
     print('OnLaunch: ${message.data}');
     _streamController.sink.add(message.data);
+    SharedPref sharedPref = new SharedPref();
+    sharedPref.save('isNotification', 'true');
   }
 }
-
