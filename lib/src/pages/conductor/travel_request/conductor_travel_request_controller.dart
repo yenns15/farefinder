@@ -44,7 +44,7 @@ class ConductorTravelRequestController {
 
   void acceptTravel() {
     Map<String, dynamic> data = {
-      'idDriver': _authProvider.getUser()!.uid,
+      'idConductor': _authProvider.getUser()!.uid,
       'status': 'accepted'
     };
 

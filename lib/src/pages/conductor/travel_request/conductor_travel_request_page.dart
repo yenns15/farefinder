@@ -33,8 +33,20 @@ class _ConductorTravelRequestPageState
         children: [
           _bannerClientInfo(),
           _textFromTo(_con.from ?? '', _con.to ?? ''),
-          _textTimeLimit(),
-
+       //   _textTimeLimit(),
+        Container(
+            height: 50,
+            color: Colors.amber,
+            margin: EdgeInsets.all(30),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
+            padding: EdgeInsets.only(left: 20,right: 20),
+            child: TextButton(
+              onPressed: _con.acceptTravel,
+            child: Text(
+              'Aceptar',
+              style: TextStyle(color: Colors.black),),
+            ),
+          )
          
          
         ],

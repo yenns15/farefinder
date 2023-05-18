@@ -69,6 +69,8 @@ class ClienteTravelRequestController {
     });
   }
 
+  //aqui me cambia cuando hago algo en el model travel info
+
   void _createTravelInfo() async {
     TravelInfo travelInfo = TravelInfo(
       id: _authProvider.getUser()!.uid,
@@ -79,7 +81,7 @@ class ClienteTravelRequestController {
       toLat: toLatLng.latitude,
       toLng: toLatLng.longitude,
       status: 'created',
-       idConductor: '',
+      idConductor: '',
     );
 
     await _travelInfoProvider.create(travelInfo);

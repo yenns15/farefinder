@@ -46,22 +46,24 @@ class _ClienteTravelRequestPageState extends State<ClienteTravelRequestPage> {
           Container(
             height: 50,
             color: Colors.amber,
-            margin: EdgeInsets.all(30),decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
+            margin: EdgeInsets.all(30),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
             padding: EdgeInsets.only(left: 20,right: 20),
-            child: TextButton(onPressed: () {
+            child: TextButton(
+              onPressed: () {
+                Navigator.pop(context);
             },
-            child: Text('Cancelar',style: TextStyle(color: Colors.black),),
-            
+            child: Text(
+              'Cancelar',
+              style: TextStyle(color: Colors.black),),
             ),
-
           )
-         
         ],
       ),
     );
   }
 
-  Widget _buttonCancel() {
+Widget _buttonCancel() {
     return Container(
       height: 50,
       margin: EdgeInsets.all(30),
@@ -70,10 +72,12 @@ class _ClienteTravelRequestPageState extends State<ClienteTravelRequestPage> {
         color: Colors.amber,
         icon: Icons.cancel_outlined,
         textColor: Colors.black,
-        onPressed: () {},
+        onPressed: () { Navigator.pop(context);},
       ),
     );
   }
+  
+  
 
   Widget _textCounter() {
     return Container(
