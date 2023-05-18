@@ -41,9 +41,9 @@ class _ConductorTravelRequestPageState
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
             padding: EdgeInsets.only(left: 20,right: 20),
             child: TextButton(
-              onPressed: _con.acceptTravel,
+              onPressed: _con.cancelTravel,
             child: Text(
-              'Aceptar',
+              'Cancelar',
               style: TextStyle(color: Colors.black),),
             ),
           )
@@ -66,7 +66,7 @@ class _ConductorTravelRequestPageState
           Container(
             width: MediaQuery.of(context).size.width * 0.45,
             child: ButtonApp(
-              onPressed: () {},
+              onPressed: _con.cancelTravel,
               text: 'Cancelar',
               color: Colors.red,
               textColor: Colors.white,

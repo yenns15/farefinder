@@ -10,6 +10,7 @@ import 'package:farefinder/src/providers/push_notifications_provider.dart';
 import 'package:farefinder/src/providers/travel_info_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:farefinder/src/utils/snackbar.dart' as utils;
 
 class ClienteTravelRequestController {
   late BuildContext context;
@@ -65,6 +66,16 @@ class ClienteTravelRequestController {
               travelInfo.status == 'accepted') {
             Navigator.pushNamedAndRemoveUntil(
                 context, 'cliente/travel/map', (route) => false);
+          } else if (travelInfo.status == 'no_accepted') {
+            utils.Snackbar.showSnackbar(
+                context, key, 'El conductor no acepto tu solicitud');
+            Future.delayed(Duration(milliseconds: 5000), () {
+           
+            Navigator.pushNamedAndRemoveUntil(
+                context, 'cliente/map', (route) => false);
+            });
+
+           
           }
         }
       }

@@ -53,6 +53,18 @@ class ConductorTravelRequestController {
         context, 'conductor/travel/map', (route) => false);
   }
 
+  void cancelTravel(){
+   Map<String, dynamic> data = {
+      'status': 'no_accepted'
+    };
+
+    _travelInfoProvider.update(data, idCliente);
+    Navigator.pushNamedAndRemoveUntil(
+        context, 'conductor/map', (route) => false);
+
+
+  }
+
   void getClienteInfo() async {
     client = (await _clientProvider.getById(idCliente))!;
     print('Client: ${client.toJson()}');
