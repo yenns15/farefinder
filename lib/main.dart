@@ -5,6 +5,7 @@ import 'package:farefinder/src/pages/cliente/travel_request/cliente_travel_reque
 import 'package:farefinder/src/pages/conductor/map/conductor_map_page.dart';
 import 'package:farefinder/src/pages/conductor/register/conductor_register_page.dart';
 import 'package:farefinder/src/pages/conductor/travel_request/conductor_travel_request_page.dart';
+import 'package:farefinder/src/pages/conductor/travel_map/conductor_travel_map_page.dart';
 import 'package:farefinder/src/pages/home/home_page.dart';
 import 'package:farefinder/src/pages/login/login_page.dart';
 import 'package:farefinder/src/providers/push_notifications_provider.dart';
@@ -73,13 +74,11 @@ class _MyAppState extends State<MyApp> {
         'cliente/register': (BuildContext context) => ClienteRegisterPage(),
         'conductor/register': (BuildContext context) => ConductorRegisterPage(),
         'conductor/map': (BuildContext context) => ConductorMapPage(),
-        'conductor/travel/request': (BuildContext context) =>
-            ConductorTravelRequestPage(),
+        'conductor/travel/request': (BuildContext context) => ConductorTravelRequestPage(),
+        'conductor/travel/map': (BuildContext context) =>  ConductorTravelMapPage(),
         'cliente/map': (BuildContext context) => ClienteMapPage(),
-        'cliente/travel/info': (BuildContext context) =>
-            ClienteTravelInfoPage(),
-        'cliente/travel/request': (BuildContext context) =>
-            ClienteTravelRequestPage()
+        'cliente/travel/info': (BuildContext context) =>  ClienteTravelInfoPage(),
+        'cliente/travel/request': (BuildContext context) => ClienteTravelRequestPage()
       },
     );
   }

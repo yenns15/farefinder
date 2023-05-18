@@ -79,6 +79,7 @@ class ClienteTravelRequestController {
       toLat: toLatLng.latitude,
       toLng: toLatLng.longitude,
       status: 'created',
+       idConductor: '',
     );
 
     await _travelInfoProvider.create(travelInfo);

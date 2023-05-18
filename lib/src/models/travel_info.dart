@@ -9,7 +9,7 @@ String travelInfoToJson(TravelInfo data) => json.encode(data.toJson());
 class TravelInfo {
     String id;
     String status;
-   // String idConductor;
+    String idConductor;
     String from;
     String to;
     //String idTravelHistory;
@@ -22,7 +22,7 @@ class TravelInfo {
     TravelInfo({
         required this.id,
         required this.status,
-       // required this.idConductor,
+        required this.idConductor,
         required this.from,
         required this.to,
        // required this.idTravelHistory,
@@ -36,7 +36,7 @@ class TravelInfo {
     factory TravelInfo.fromJson(Map<String, dynamic> json) => TravelInfo(
         id: json["id"],
         status: json["status"],
-       // idConductor: json["idConductor"],
+        idConductor: json["idConductor"],
         from: json["from"],
         to: json["to"],
       //  idTravelHistory: json["idTravelHistory"],
@@ -50,7 +50,7 @@ class TravelInfo {
     Map<String, dynamic> toJson() => {
         "id": id,
         "status": status,
-       // "idConductor": idConductor,
+        "idConductor": idConductor,
         "from": from,
         "to": to,
       //  "idTravelHistory": idTravelHistory,

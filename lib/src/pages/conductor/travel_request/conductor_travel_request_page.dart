@@ -32,13 +32,14 @@ class _ConductorTravelRequestPageState
       body: Column(
         children: [
           _bannerClientInfo(),
-          _textFromTo(
-              'Lugar de origen ', 'Lugar de destino '),
+          _textFromTo(_con.from ?? '', _con.to ?? ''),
           _textTimeLimit(),
-          _buttonsAction() 
+
+         
+         
         ],
       ),
-   //   bottomNavigationBar: _buttonsAction(),
+       
     );
   }
 
@@ -63,7 +64,7 @@ class _ConductorTravelRequestPageState
           Container(
             width: MediaQuery.of(context).size.width * 0.45,
             child: ButtonApp(
-              onPressed: () {},
+              onPressed: _con.acceptTravel,
               text: 'Aceptar',
               color: Colors.cyan,
               textColor: Colors.white,
@@ -111,7 +112,7 @@ class _ConductorTravelRequestPageState
           Container(
             margin: EdgeInsets.symmetric(horizontal: 30),
             child: Text(
-              from,
+              to,
               style: TextStyle(fontSize: 17),
               maxLines: 2,
             ),
@@ -138,7 +139,7 @@ class _ConductorTravelRequestPageState
             Container(
               margin: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
               child: Text(
-                'Tu cliente',
+                _con.client?.username?? '',
                 style: TextStyle(fontSize: 17, color: Colors.white),
               ),
             )
@@ -148,11 +149,7 @@ class _ConductorTravelRequestPageState
     );
   }
 
- void refresh() {
-    setState(() {
-
-    });
+  void refresh() {
+    setState(() {});
   }
-
-
 }

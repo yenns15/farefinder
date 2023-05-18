@@ -12,7 +12,7 @@ class ButtonApp extends StatelessWidget {
     this.textColor = Colors.white,
     this.icon = Icons.arrow_forward_ios,
     required Function this.onPressed,
-  required String this.text,
+    required String this.text,
   });
 
   @override

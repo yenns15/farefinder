@@ -38,14 +38,26 @@ class _ClienteTravelRequestPageState extends State<ClienteTravelRequestPage> {
     return Scaffold(
       body: Column(
         children: [
+         
           _driverInfo(),
           _lottieAnimation(),
           _textLookingFor(),
           _textCounter(),
+          Container(
+            height: 50,
+            color: Colors.amber,
+            margin: EdgeInsets.all(30),decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
+            padding: EdgeInsets.only(left: 20,right: 20),
+            child: TextButton(onPressed: () {
+            },
+            child: Text('Cancelar',style: TextStyle(color: Colors.black),),
+            
+            ),
+
+          )
+         
         ],
       ),
-      bottomNavigationBar: _buttonCancel(),
-      floatingActionButton: FloatingActionButton(onPressed: () {}),
     );
   }
 
