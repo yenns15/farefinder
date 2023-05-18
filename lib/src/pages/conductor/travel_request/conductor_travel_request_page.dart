@@ -17,6 +17,14 @@ class _ConductorTravelRequestPageState
     extends State<ConductorTravelRequestPage> {
   ConductorTravelRequestController _con =
       new ConductorTravelRequestController();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _con.dispose();
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -33,25 +41,23 @@ class _ConductorTravelRequestPageState
         children: [
           _bannerClientInfo(),
           _textFromTo(_con.from ?? '', _con.to ?? ''),
-       //   _textTimeLimit(),
-        Container(
+          _textTimeLimit(),
+          Container(
             height: 50,
             color: Colors.amber,
             margin: EdgeInsets.all(30),
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
-            padding: EdgeInsets.only(left: 20,right: 20),
+            padding: EdgeInsets.only(left: 20, right: 20),
             child: TextButton(
               onPressed: _con.cancelTravel,
-            child: Text(
-              'Cancelar',
-              style: TextStyle(color: Colors.black),),
+              child: Text(
+                'Cancelar',
+                style: TextStyle(color: Colors.black),
+              ),
             ),
           )
-         
-         
         ],
       ),
-       
     );
   }
 
@@ -92,7 +98,7 @@ class _ConductorTravelRequestPageState
     return Container(
       margin: EdgeInsets.symmetric(vertical: 30),
       child: Text(
-        '0',
+        _con.seconds.toString(),
         style: TextStyle(fontSize: 50),
       ),
     );
@@ -151,7 +157,7 @@ class _ConductorTravelRequestPageState
             Container(
               margin: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
               child: Text(
-                _con.client?.username?? '',
+                _con.client?.username ?? '',
                 style: TextStyle(fontSize: 17, color: Colors.white),
               ),
             )

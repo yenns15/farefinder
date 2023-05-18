@@ -4,6 +4,7 @@ import 'package:farefinder/src/providers/travel_info_provider.dart';
 import 'package:farefinder/src/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:farefinder/src/models/client.dart';
+import 'dart:async';
 
 class ConductorTravelRequestController {
   late BuildContext context;
@@ -18,6 +19,8 @@ class ConductorTravelRequestController {
   late ClientProvider _clientProvider;
   late TravelInfoProvider _travelInfoProvider;
   late AuthProvider _authProvider;
+  late Timer _timer;
+  int seconds = 30;
 
   Future init(BuildContext context, Function refresh) async {
     this.context = context;
@@ -29,7 +32,6 @@ class ConductorTravelRequestController {
     _travelInfoProvider = new TravelInfoProvider();
     _authProvider = new AuthProvider();
 
-
     Map<String, dynamic> arguments =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
 
@@ -40,6 +42,21 @@ class ConductorTravelRequestController {
     idCliente = arguments['idClient'];
 
     getClienteInfo();
+    starTimer();
+  }
+
+  void dispose() {
+    _timer?.cancel();
+  }
+
+  void starTimer() {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      seconds = seconds - 1;
+      refresh();
+      if (seconds == 0) {
+        cancelTravel();
+      }
+    });
   }
 
   void acceptTravel() {
@@ -53,16 +70,12 @@ class ConductorTravelRequestController {
         context, 'conductor/travel/map', (route) => false);
   }
 
-  void cancelTravel(){
-   Map<String, dynamic> data = {
-      'status': 'no_accepted'
-    };
+  void cancelTravel() {
+    Map<String, dynamic> data = {'status': 'no_accepted'};
 
     _travelInfoProvider.update(data, idCliente);
     Navigator.pushNamedAndRemoveUntil(
         context, 'conductor/map', (route) => false);
-
-
   }
 
   void getClienteInfo() async {
