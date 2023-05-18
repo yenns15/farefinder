@@ -36,30 +36,51 @@ class _ConductorTravelRequestPageState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          _bannerClientInfo(),
-          _textFromTo(_con.from ?? '', _con.to ?? ''),
-          _textTimeLimit(),
-          Container(
-            height: 50,
-            color: Colors.amber,
-            margin: EdgeInsets.all(30),
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
-            padding: EdgeInsets.only(left: 20, right: 20),
-            child: TextButton(
-              onPressed: _con.cancelTravel,
-              child: Text(
-                'Cancelar',
-                style: TextStyle(color: Colors.black),
+  return Scaffold(
+    body: Column(
+      children: [
+        _bannerClientInfo(),
+        _textFromTo(_con.from ?? '', _con.to ?? ''),
+        _textTimeLimit(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              height: 50,
+              color: Colors.amber,
+              margin: EdgeInsets.all(30),
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
+              padding: EdgeInsets.only(left: 20, right: 20),
+              child: TextButton(
+                onPressed: _con.cancelTravel,
+                child: Text(
+                  'Cancelar',
+                  style: TextStyle(color: Colors.black),
+                ),
               ),
             ),
-          )
-        ],
-      ),
-    );
-  }
+            SizedBox(width: 10), 
+            Container(
+              height: 50,
+              color: Colors.amber,
+              margin: EdgeInsets.all(30),
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
+              padding: EdgeInsets.only(left: 20, right: 20),
+              child: TextButton(
+                onPressed: _con.acceptTravel,
+                child: Text(
+                  'Aceptar',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    ),
+  );
+}
+
 
   Widget _buttonsAction() {
     return Container(
