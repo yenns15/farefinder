@@ -30,6 +30,7 @@ class ClienteTravelRequestController {
   List<String> nearbyDrivers = [];
 
   late StreamSubscription<List<DocumentSnapshot>> _streamSubscription;
+  late StreamSubscription<DocumentSnapshot> _streamStatusSubscription;
 
   Future<void> init(BuildContext context, Function refresh) async {
     this.context = context;
@@ -50,8 +51,29 @@ class ClienteTravelRequestController {
     _getNearbyDrivers();
   }
 
+  void _checkDriverResponse() {
+    Stream<DocumentSnapshot> stream =
+        _travelInfoProvider.getByIdStream(_authProvider.getUser()!.uid);
+    _streamStatusSubscription = stream.listen((DocumentSnapshot document) {
+      if (document.exists) {
+        Map<String, dynamic>? data = document.data() as Map<String, dynamic>?;
+
+        if (data != null) {
+          TravelInfo travelInfo = TravelInfo.fromJson(data);
+
+          if (travelInfo.idConductor != null &&
+              travelInfo.status == 'accepted') {
+            Navigator.pushNamedAndRemoveUntil(
+                context, 'cliente/travel/map', (route) => false);
+          }
+        }
+      }
+    });
+  }
+
   void dispose() {
     _streamSubscription?.cancel();
+    _streamStatusSubscription?.cancel();
   }
 
   void _getNearbyDrivers() {
@@ -85,10 +107,10 @@ class ClienteTravelRequestController {
     );
 
     await _travelInfoProvider.create(travelInfo);
+    _checkDriverResponse();
   }
 
-
- Future<void> getDriverInfo(String idConductor) async {
+  Future<void> getDriverInfo(String idConductor) async {
     Conductor? conductor = await _conductorProvider.getById(idConductor);
     _sendNotification(conductor!.token);
   }

@@ -28,7 +28,7 @@ class _ConductorTravelMapPageState extends State<ConductorTravelMapPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text('PANTALLA DEL MAPA'),
+        child: Text('PANTALLA DEL MAPA DEL CONDUCTOR'),
       ),
     );
   }
