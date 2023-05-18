@@ -64,8 +64,8 @@ class ClienteTravelRequestController {
 
           if (travelInfo.idConductor != null &&
               travelInfo.status == 'accepted') {
-            Navigator.pushNamedAndRemoveUntil(
-                context, 'cliente/travel/map', (route) => false);
+            //Navigator.pushNamedAndRemoveUntil( context, 'cliente/travel/map', (route) => false);
+             Navigator.pushNamed( context, 'cliente/travel/map');
           } else if (travelInfo.status == 'no_accepted') {
             utils.Snackbar.showSnackbar(
                 context, key, 'El conductor no acepto tu solicitud');

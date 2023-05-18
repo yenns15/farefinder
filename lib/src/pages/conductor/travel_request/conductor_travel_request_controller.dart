@@ -65,13 +65,17 @@ class ConductorTravelRequestController {
       'status': 'accepted'
     };
 
+    _timer?.cancel();
+
     _travelInfoProvider.update(data, idCliente);
-    Navigator.pushNamedAndRemoveUntil(
-        context, 'conductor/travel/map', (route) => false);
+    // Navigator.pushNamedAndRemoveUntil(context, 'conductor/travel/map', (route) => false,arguments: idCliente );
+    Navigator.pushNamed(context, 'conductor/travel/map',arguments: idCliente);
   }
 
   void cancelTravel() {
     Map<String, dynamic> data = {'status': 'no_accepted'};
+
+    _timer?.cancel();
 
     _travelInfoProvider.update(data, idCliente);
     Navigator.pushNamedAndRemoveUntil(

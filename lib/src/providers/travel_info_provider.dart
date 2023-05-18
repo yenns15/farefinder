@@ -12,6 +12,16 @@ class TravelInfoProvider {
     return _ref.doc(id).snapshots(includeMetadataChanges: true);
   }
 
+   Future<TravelInfo?> getById(String id) async {
+      DocumentSnapshot document = await _ref.doc(id).get();
+      Map<String, dynamic>? data = document.data() as Map<String, dynamic>?;
+      if (document.exists){
+       TravelInfo travelInfo = TravelInfo.fromJson(data!);
+       return travelInfo;
+      }
+        return null;
+    }
+
  Future<void> create(TravelInfo travelInfo) async {
     late String errorMessage;
 

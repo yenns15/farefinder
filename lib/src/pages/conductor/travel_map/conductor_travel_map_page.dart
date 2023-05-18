@@ -158,6 +158,7 @@ class _ConductorTravelMapPageState extends State<ConductorTravelMapPage> {
       myLocationEnabled: false,
       myLocationButtonEnabled: false,
       markers: Set<Marker>.of(_con.markers.values),
+      polylines: _con.polylines,
     );
   }
 

@@ -1,12 +1,16 @@
 import 'dart:async';
+import 'package:farefinder/src/api/environment.dart';
 import 'package:farefinder/src/models/conductor.dart';
+import 'package:farefinder/src/models/travel_info.dart';
 import 'package:farefinder/src/providers/auth_provider.dart';
 import 'package:farefinder/src/providers/conductor_provider.dart';
 import 'package:farefinder/src/providers/geofire_provider.dart';
 import 'package:farefinder/src/providers/push_notifications_provider.dart';
+import 'package:farefinder/src/providers/travel_info_provider.dart';
 import 'package:farefinder/src/utils/my_progress_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -28,33 +32,83 @@ class ConductorTravelMapController {
 
   Position? _position;
   late StreamSubscription<Position> _positionStream;
+
   late BitmapDescriptor markerDriver;
+  late BitmapDescriptor fromMarker;
+  late BitmapDescriptor toMarker;
 
   late GeofireProvider _geofireProvider;
   late AuthProvider _authProvider;
   late ConductorProvider _conductorProvider;
   late PushNotificationsProvider _pushNotificationsProvider;
+  late TravelInfoProvider _travelInfoProvider;
 
   bool isConnect = false;
   late ProgressDialog _progressDialog;
 
   late StreamSubscription<DocumentSnapshot<Object?>> _statusSuscription;
   late StreamSubscription<DocumentSnapshot<Object?>> _conductorInfoSuscription;
+
+  Set<Polyline> polylines = {};
+  List<LatLng> points = [];
+
   Conductor? conductor;
+
+  late String _idTravel;
 
   Future<void> init(BuildContext context, Function refresh) async {
     this.context = context;
     this.refresh = refresh;
+    _idTravel = ModalRoute.of(context)?.settings.arguments as String;
     _geofireProvider = new GeofireProvider();
     _authProvider = new AuthProvider();
     _conductorProvider = new ConductorProvider();
+    _travelInfoProvider = new TravelInfoProvider();
     _pushNotificationsProvider = new PushNotificationsProvider();
     _progressDialog =
         MyProgressDialog.createProgressDialog(context, 'Conectandose...');
     markerDriver = await createMarkerImageFromAsset('assets/img/uber_car.png');
+    fromMarker = await createMarkerImageFromAsset('assets/img/map_pin_red.png');
+    toMarker = await createMarkerImageFromAsset('assets/img/map_pin_blue.png');
+
     checkGPS();
 
     getConductorInfo();
+  }
+
+  void _getTravelInfo() async {
+    TravelInfo? travelInfo = await _travelInfoProvider.getById(_idTravel);
+    LatLng from = LatLng(_position!.latitude, _position!.longitude);
+    LatLng to = LatLng(travelInfo!.fromLat, travelInfo.fromLng);
+
+    setPolylines(from, to);
+  }
+
+  Future<void> setPolylines(LatLng from, LatLng to) async {
+    PointLatLng pointFromLatLng = PointLatLng(from.latitude, from.longitude);
+    PointLatLng pointToLatLng = PointLatLng(to.latitude, to.longitude);
+
+    PolylineResult result = await PolylinePoints().getRouteBetweenCoordinates(
+        Environment.API_KEY_MAPS, pointFromLatLng, pointToLatLng);
+
+    for (PointLatLng point in result.points) {
+      points.add(LatLng(point.latitude, point.longitude));
+    }
+    //aca podemos cambiar el color de la ruta
+    Polyline polyline = Polyline(
+        polylineId: PolylineId('poly'),
+        color: Colors.green,
+        points: points,
+        width: 6);
+
+    polylines.add(polyline);
+
+    addSimpleMarker(
+        'from', to.latitude, to.longitude, 'Lugar de recogida', '', fromMarker);
+    // addMarker(
+    //    'to', toLatLng.latitude, toLatLng.longitude, 'Destino', '', toMarker);
+
+    refresh();
   }
 
   void getConductorInfo() {
@@ -92,6 +146,7 @@ class ConductorTravelMapController {
     try {
       await _determinePosition();
       _position = await Geolocator.getLastKnownPosition();
+      _getTravelInfo();
       centerPosition();
       saveLocation();
       addMarker('conductor', _position!.latitude, _position!.longitude,
@@ -190,6 +245,18 @@ class ConductorTravelMapController {
       flat: true,
       anchor: Offset(0.5, 0.5),
       rotation: _position!.heading,
+    );
+    markers[id] = marker;
+  }
+
+  void addSimpleMarker(String markerId, double lat, double lng, String title,
+      String content, BitmapDescriptor iconMaker) {
+    MarkerId id = MarkerId(markerId);
+    Marker marker = Marker(
+      markerId: id,
+      icon: iconMaker,
+      position: LatLng(lat, lng),
+      infoWindow: InfoWindow(title: title, snippet: content),
     );
     markers[id] = marker;
   }
