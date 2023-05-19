@@ -68,7 +68,7 @@ class ConductorTravelRequestController {
     _timer?.cancel();
     _travelInfoProvider.update(data, idCliente);
     // Navigator.pushNamedAndRemoveUntil(context, 'conductor/travel/map', (route) => false,arguments: idCliente );
-    Navigator.pushNamed(context, 'conductor/travel/map',arguments: idCliente);
+    Navigator.pushReplacementNamed(context, 'conductor/travel/map',arguments: idCliente);
   }
 
   void cancelTravel() {
