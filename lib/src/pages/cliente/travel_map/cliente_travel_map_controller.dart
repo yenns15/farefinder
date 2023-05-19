@@ -53,7 +53,10 @@ class ClienteTravelMapController {
   late LatLng _conductorLatLng;
   TravelInfo? travelInfo;
 
-   bool isRouteReady = false;
+  bool isRouteReady = false;
+
+  late String currentStatus = '';
+  Color colorStatus = Colors.white;
 
   Future<void> init(BuildContext context, Function refresh) async {
     this.context = context;
@@ -85,20 +88,48 @@ class ClienteTravelMapController {
 
       if (!isRouteReady) {
         isRouteReady = true;
-        LatLng from =
-            LatLng(_conductorLatLng.latitude, _conductorLatLng.longitude);
-        LatLng to = LatLng(travelInfo!.fromLat, travelInfo!.fromLng);
-        setPolylines(from, to);
+        checkTravelStatus();
+       
       }
     });
   }
+
+  void pickupTravel(){
+     LatLng from = LatLng(_conductorLatLng.latitude, _conductorLatLng.longitude);
+        LatLng to = LatLng(travelInfo!.fromLat, travelInfo!.fromLng);
+        addSimpleMarker(
+        'from', to.latitude, to.longitude, 'Lugar de recogida', '', fromMarker); 
+        setPolylines(from, to);
+  }
+
+  void checkTravelStatus() async {
+  Stream<DocumentSnapshot> stream =
+      _travelInfoProvider.getByIdStream(_authProvider.getUser()!.uid);
+  stream.listen((DocumentSnapshot document) {
+    travelInfo = TravelInfo.fromJson(document.data() as Map<String, dynamic>);
+
+    if (travelInfo!.status == 'accepted') {
+      currentStatus = 'Viaje aceptado';
+      colorStatus = Colors.white;
+      pickupTravel();
+    } else if (travelInfo!.status == 'started') {
+      currentStatus = 'Viaje iniciado';
+      colorStatus = Colors.amber;
+    } else if (travelInfo!.status == 'finished') {
+      currentStatus = 'Viaje finalizado';
+      colorStatus = Colors.cyan;
+    }
+
+    refresh();
+  });
+}
+
 
   void _getTravelInfo() async {
     travelInfo =
         await _travelInfoProvider.getById(_authProvider.getUser()!.uid);
     getConductorInfo(travelInfo!.idConductor);
     getconductorLocation(travelInfo!.idConductor);
-    
   }
 
   Future<void> setPolylines(LatLng from, LatLng to) async {
@@ -120,8 +151,6 @@ class ClienteTravelMapController {
 
     polylines.add(polyline);
 
-    addSimpleMarker(
-        'from', to.latitude, to.longitude, 'Lugar de recogida', '', fromMarker);
     // addMarker(
     //    'to', toLatLng.latitude, toLatLng.longitude, 'Destino', '', toMarker);
 

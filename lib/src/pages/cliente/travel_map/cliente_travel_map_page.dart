@@ -36,9 +36,7 @@ class _ClienteTravelMapPageState extends State<ClienteTravelMapPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     _buttonUserInfo(),
-                    Column(
-                      children: [_cardKmInfo('0'), _cardMinInfo('0')],
-                    ),
+                    _cardStatusInfo(_con.currentStatus),
                     _buttonCenterPosition()
                   ],
                 ),
@@ -51,32 +49,17 @@ class _ClienteTravelMapPageState extends State<ClienteTravelMapPage> {
     );
   }
 
-  Widget _cardKmInfo(String km) {
+  Widget _cardStatusInfo(String status) {
     return SafeArea(
         child: Container(
       width: 110,
+      padding: EdgeInsets.symmetric(vertical: 10),
       margin: EdgeInsets.only(top: 10),
       decoration: BoxDecoration(
-          color: Colors.white,
+          color: _con.colorStatus,
           borderRadius: BorderRadius.all(Radius.circular(20))),
       child: Text(
-        '${km ?? ''} km',
-        maxLines: 1,
-        textAlign: TextAlign.center,
-      ),
-    ));
-  }
-
-  Widget _cardMinInfo(String min) {
-    return SafeArea(
-        child: Container(
-      width: 110,
-      margin: EdgeInsets.only(top: 10),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(20))),
-      child: Text(
-        '${min ?? ''} seg',
+        '${status ?? ''} seg',
         maxLines: 1,
         textAlign: TextAlign.center,
       ),
