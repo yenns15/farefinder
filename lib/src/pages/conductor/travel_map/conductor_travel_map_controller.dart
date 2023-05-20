@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:ffi';
 import 'package:farefinder/src/api/environment.dart';
 import 'package:farefinder/src/models/conductor.dart';
 import 'package:farefinder/src/models/travel_info.dart';
 import 'package:farefinder/src/providers/auth_provider.dart';
 import 'package:farefinder/src/providers/conductor_provider.dart';
 import 'package:farefinder/src/providers/geofire_provider.dart';
+import 'package:farefinder/src/providers/prices_provider.dart';
 import 'package:farefinder/src/providers/push_notifications_provider.dart';
 import 'package:farefinder/src/providers/travel_info_provider.dart';
 import 'package:farefinder/src/utils/my_progress_dialog.dart';
@@ -18,6 +20,7 @@ import 'package:location/location.dart' as location;
 import 'package:farefinder/src/utils/snackbar.dart' as utils;
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:farefinder/src/models/prices.dart';
 
 class ConductorTravelMapController {
   late BuildContext context;
@@ -42,6 +45,7 @@ class ConductorTravelMapController {
   late ConductorProvider _conductorProvider;
   late PushNotificationsProvider _pushNotificationsProvider;
   late TravelInfoProvider _travelInfoProvider;
+  late PricesProvider _pricesProvider;
 
   bool isConnect = false;
   late ProgressDialog _progressDialog;
@@ -61,6 +65,10 @@ class ConductorTravelMapController {
   Color colorStatus = Colors.amber;
 
   late double _distanceBetween;
+  late Timer _timer;
+  int seconds = 0;
+  double mt = 0;
+  double km = 0;
 
   Future<void> init(BuildContext context, Function refresh) async {
     this.context = context;
@@ -71,6 +79,7 @@ class ConductorTravelMapController {
     _conductorProvider = new ConductorProvider();
     _travelInfoProvider = new TravelInfoProvider();
     _pushNotificationsProvider = new PushNotificationsProvider();
+    _pricesProvider = new PricesProvider();
     _progressDialog =
         MyProgressDialog.createProgressDialog(context, 'Conectandose...');
     markerDriver = await createMarkerImageFromAsset('assets/img/uber_car.png');
@@ -80,6 +89,40 @@ class ConductorTravelMapController {
     checkGPS();
 
     getConductorInfo();
+  }
+
+  Future<double> calculatePrice() async {
+    Prices prices = await _pricesProvider.getAll();
+
+    if (seconds < 60) seconds = 60;
+    if (km == 0) km = 0.1;
+    int min = seconds ~/ 60;
+
+    print('==== MIN TOTALES=====');
+    print(min.toString());
+
+    print('==== KM TOTALES=====');
+    print(km.toString());
+
+    double priceMin = min * prices.min;
+    double priceKm = km * prices.km;
+
+    double total = priceMin + priceKm;
+
+    if (total < prices.minValue) {
+      total = prices.minValue;
+    }
+
+    print('====  TOTALES=====');
+    print(total.toString());
+    return total;
+  }
+
+  void startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      seconds = timer.tick;
+      refresh();
+    });
   }
 
   void isCloseToPickupPosition(LatLng from, LatLng to) {
@@ -103,16 +146,28 @@ class ConductorTravelMapController {
       travelInfo!.status = 'started';
       currentStatus = 'Finalizar viaje';
       colorStatus = Colors.cyan;
+      polylines = {};
+      points = [];
+      //markers.remove(markers['from']);
+      markers.removeWhere((key, markers) => markers.markerId.value == 'from');
+      addSimpleMarker(
+          'to', travelInfo!.toLat, travelInfo!.toLng, 'Destino', '', toMarker);
+      LatLng from = new LatLng(_position!.latitude, _position!.longitude);
+      LatLng to = new LatLng(travelInfo!.toLat, travelInfo!.toLng);
+      setPolylines(from, to);
+      startTimer();
+      refresh();
     } else {
       utils.Snackbar.showSnackbar(
           context, key, 'Debes estar cerca a la posicion del cliente');
-          
     }
 
     refresh();
   }
 
   void finishTravel() async {
+    _timer?.cancel();
+    double total = await calculatePrice();
     Map<String, dynamic> data = {'status': 'finished'};
     await _travelInfoProvider.update(data, _idTravel);
     travelInfo!.status = 'finished';
@@ -123,7 +178,8 @@ class ConductorTravelMapController {
     travelInfo = await _travelInfoProvider.getById(_idTravel);
     LatLng from = LatLng(_position!.latitude, _position!.longitude);
     LatLng to = LatLng(travelInfo!.fromLat, travelInfo!.fromLng);
-
+    addSimpleMarker(
+        'from', to.latitude, to.longitude, 'Lugar de recogida', '', fromMarker);
     setPolylines(from, to);
   }
 
@@ -146,8 +202,6 @@ class ConductorTravelMapController {
 
     polylines.add(polyline);
 
-    addSimpleMarker(
-        'from', to.latitude, to.longitude, 'Lugar de recogida', '', fromMarker);
     // addMarker(
     //    'to', toLatLng.latitude, toLatLng.longitude, 'Destino', '', toMarker);
 
@@ -168,6 +222,7 @@ class ConductorTravelMapController {
   }
 
   void dispose() {
+    _timer?.cancel();
     _positionStream?.cancel();
     _statusSuscription?.cancel();
     _conductorInfoSuscription?.cancel();
@@ -199,6 +254,15 @@ class ConductorTravelMapController {
       _positionStream = Geolocator.getPositionStream(
               desiredAccuracy: LocationAccuracy.best, distanceFilter: 1)
           .listen((Position position) {
+        if (travelInfo!.status == 'started') {
+          mt = mt +
+              Geolocator.distanceBetween(
+                  _position!.latitude,
+                  _position!.longitude,
+                  position!.latitude,
+                  position!.longitude);
+          km = mt / 1000;
+        }
         _position = position;
         addMarker('conductor', _position!.latitude, _position!.longitude,
             'Tu posicion', '', markerDriver);
@@ -208,7 +272,7 @@ class ConductorTravelMapController {
           LatLng to = new LatLng(travelInfo!.fromLat, travelInfo!.fromLng);
           isCloseToPickupPosition(from, to);
         }
-         saveLocation();
+        saveLocation();
         refresh();
       });
     } catch (error) {

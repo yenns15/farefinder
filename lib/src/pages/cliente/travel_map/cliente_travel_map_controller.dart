@@ -54,6 +54,8 @@ class ClienteTravelMapController {
   TravelInfo? travelInfo;
 
   bool isRouteReady = false;
+  bool isPickupTravel = false;
+  bool isStartTravel = false;
 
   late String currentStatus = '';
   Color colorStatus = Colors.white;
@@ -94,11 +96,15 @@ class ClienteTravelMapController {
   }
 
   void pickupTravel() {
-    LatLng from = LatLng(_conductorLatLng.latitude, _conductorLatLng.longitude);
-    LatLng to = LatLng(travelInfo!.fromLat, travelInfo!.fromLng);
-    addSimpleMarker(
-        'from', to.latitude, to.longitude, 'Lugar de recogida', '', fromMarker);
-    setPolylines(from, to);
+    if (!isPickupTravel) {
+      isPickupTravel = true;
+      LatLng from =
+          LatLng(_conductorLatLng.latitude, _conductorLatLng.longitude);
+      LatLng to = LatLng(travelInfo!.fromLat, travelInfo!.fromLng);
+      addSimpleMarker('from', to.latitude, to.longitude, 'Lugar de recogida',
+          '', fromMarker);
+      setPolylines(from, to);
+    }
   }
 
   void checkTravelStatus() async {
@@ -114,6 +120,7 @@ class ClienteTravelMapController {
       } else if (travelInfo!.status == 'started') {
         currentStatus = 'Viaje iniciado';
         colorStatus = Colors.amber;
+        startTravel();
       } else if (travelInfo!.status == 'finished') {
         currentStatus = 'Viaje finalizado';
         colorStatus = Colors.cyan;
@@ -121,6 +128,21 @@ class ClienteTravelMapController {
 
       refresh();
     });
+  }
+
+  void startTravel() {
+    if (!isStartTravel) {
+      isStartTravel = true;
+       polylines = {};
+      points = [];
+    markers.removeWhere((key, markers) => markers.markerId.value == 'from');
+      addSimpleMarker(
+          'to', travelInfo!.toLat, travelInfo!.toLng, 'Destino', '', toMarker);
+      LatLng from = new LatLng(_conductorLatLng!.latitude, _conductorLatLng!.longitude);
+      LatLng to = new LatLng(travelInfo!.toLat, travelInfo!.toLng);
+      setPolylines(from, to);
+      refresh();
+    }
   }
 
   void _getTravelInfo() async {
