@@ -182,6 +182,8 @@ class ConductorTravelMapController {
     Map<String, dynamic> data = {'status': 'finished'};
     await _travelInfoProvider.update(data, _idTravel);
     travelInfo!.status = 'finished';
+    Navigator.pushNamedAndRemoveUntil(
+        context, 'conductor/travel/calificaciones', (route) => false);
     refresh();
   }
 

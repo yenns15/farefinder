@@ -5,6 +5,7 @@ import 'package:farefinder/src/pages/cliente/travel_map/cliente_travel_map_page.
 import 'package:farefinder/src/pages/cliente/travel_request/cliente_travel_request_page.dart';
 import 'package:farefinder/src/pages/conductor/map/conductor_map_page.dart';
 import 'package:farefinder/src/pages/conductor/register/conductor_register_page.dart';
+import 'package:farefinder/src/pages/conductor/travel_calificaciones/conductor_travel_calificaciones_page.dart';
 import 'package:farefinder/src/pages/conductor/travel_request/conductor_travel_request_page.dart';
 import 'package:farefinder/src/pages/conductor/travel_map/conductor_travel_map_page.dart';
 import 'package:farefinder/src/pages/home/home_page.dart';
@@ -61,7 +62,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       title: 'Farefinder',
       navigatorKey: navigatorKey,
-      initialRoute: 'home',
+      initialRoute: 'conductor/travel/calificaciones',
       theme: ThemeData(
         fontFamily: 'NimbusSans',
         appBarTheme: AppBarTheme(
@@ -77,6 +78,7 @@ class _MyAppState extends State<MyApp> {
         'conductor/map': (BuildContext context) => ConductorMapPage(),
         'conductor/travel/request': (BuildContext context) => ConductorTravelRequestPage(),
         'conductor/travel/map': (BuildContext context) =>  ConductorTravelMapPage(),
+        'conductor/travel/calificaciones': (BuildContext context) =>  ConductorTravelCalificacionesPage(),
         'cliente/map': (BuildContext context) => ClienteMapPage(),
         'cliente/travel/info': (BuildContext context) =>  ClienteTravelInfoPage(),
         'cliente/travel/request': (BuildContext context) => ClienteTravelRequestPage(),

@@ -47,7 +47,8 @@ class ClienteTravelMapController {
 
   late StreamSubscription<DocumentSnapshot<Object?>> _statusSuscription;
   late StreamSubscription<DocumentSnapshot<Object?>> _conductorInfoSuscription;
-
+  late StreamSubscription<DocumentSnapshot<Object?>> _streamLocationController;
+  late StreamSubscription<DocumentSnapshot<Object?>> _streamTravelController;
   Set<Polyline> polylines = {};
   List<LatLng> points = [];
 
@@ -82,7 +83,7 @@ class ClienteTravelMapController {
   void getconductorLocation(String idConductor) {
     Stream<DocumentSnapshot> stream =
         _geofireProvider.getLocationByIdStream(idConductor);
-    stream.listen((DocumentSnapshot document) {
+    _streamLocationController = stream.listen((DocumentSnapshot document) {
       GeoPoint geoPoint = document['position']['geopoint'];
       _conductorLatLng = new LatLng(geoPoint.latitude, geoPoint.longitude);
       addSimpleMarker('driver', _conductorLatLng.latitude,
@@ -112,7 +113,7 @@ class ClienteTravelMapController {
   void checkTravelStatus() async {
     Stream<DocumentSnapshot> stream =
         _travelInfoProvider.getByIdStream(_authProvider.getUser()!.uid);
-    stream.listen((DocumentSnapshot document) {
+    _streamTravelController = stream.listen((DocumentSnapshot document) {
       travelInfo = TravelInfo.fromJson(document.data() as Map<String, dynamic>);
 
       if (travelInfo!.status == 'accepted') {
@@ -201,6 +202,8 @@ class ClienteTravelMapController {
   void dispose() {
     _statusSuscription?.cancel();
     _conductorInfoSuscription?.cancel();
+    _streamLocationController?.cancel();
+    _streamTravelController?.cancel();
   }
 
   void onMapCreated(GoogleMapController controller) {
