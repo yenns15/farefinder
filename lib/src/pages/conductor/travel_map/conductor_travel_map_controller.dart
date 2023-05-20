@@ -55,6 +55,12 @@ class ConductorTravelMapController {
   Conductor? conductor;
 
   late String _idTravel;
+  TravelInfo? travelInfo;
+
+  String currentStatus = 'INICIAR VIAJE';
+  Color colorStatus = Colors.amber;
+
+  late double _distanceBetween;
 
   Future<void> init(BuildContext context, Function refresh) async {
     this.context = context;
@@ -76,10 +82,47 @@ class ConductorTravelMapController {
     getConductorInfo();
   }
 
+  void isCloseToPickupPosition(LatLng from, LatLng to) {
+    _distanceBetween = Geolocator.distanceBetween(
+        from.latitude, from.longitude, to.latitude, to.longitude);
+    print('----------------Distancia:$_distanceBetween----------');
+  }
+
+  void updateStatus() {
+    if (travelInfo!.status == 'accepted') {
+      startTravel();
+    } else if (travelInfo!.status == 'started') {
+      finishTravel();
+    }
+  }
+
+  void startTravel() async {
+    if (_distanceBetween <= 300) {
+      Map<String, dynamic> data = {'status': 'started'};
+      await _travelInfoProvider.update(data, _idTravel);
+      travelInfo!.status = 'started';
+      currentStatus = 'Finalizar viaje';
+      colorStatus = Colors.cyan;
+    } else {
+      utils.Snackbar.showSnackbar(
+          context, key, 'Debes estar cerca a la posicion del cliente');
+          
+    }
+
+    refresh();
+  }
+
+  void finishTravel() async {
+    Map<String, dynamic> data = {'status': 'finished'};
+    await _travelInfoProvider.update(data, _idTravel);
+    travelInfo!.status = 'finished';
+    refresh();
+  }
+
   void _getTravelInfo() async {
-    TravelInfo? travelInfo = await _travelInfoProvider.getById(_idTravel);
+    travelInfo = await _travelInfoProvider.getById(_idTravel);
     LatLng from = LatLng(_position!.latitude, _position!.longitude);
-    LatLng to = LatLng(travelInfo!.fromLat, travelInfo.fromLng);
+    LatLng to = LatLng(travelInfo!.fromLat, travelInfo!.fromLng);
 
     setPolylines(from, to);
   }
@@ -160,7 +203,12 @@ class ConductorTravelMapController {
         addMarker('conductor', _position!.latitude, _position!.longitude,
             'Tu posicion', '', markerDriver);
         animateCameraToposition(_position!.latitude, _position!.longitude);
-        saveLocation();
+        if (travelInfo?.fromLat != null && travelInfo?.fromLng != null) {
+          LatLng from = new LatLng(_position!.latitude, _position!.longitude);
+          LatLng to = new LatLng(travelInfo!.fromLat, travelInfo!.fromLng);
+          isCloseToPickupPosition(from, to);
+        }
+        // saveLocation();
         refresh();
       });
     } catch (error) {

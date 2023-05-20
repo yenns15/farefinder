@@ -59,7 +59,7 @@ class _ClienteTravelMapPageState extends State<ClienteTravelMapPage> {
           color: _con.colorStatus,
           borderRadius: BorderRadius.all(Radius.circular(20))),
       child: Text(
-        '${status ?? ''} seg',
+        '${status ?? ''} ',
         maxLines: 1,
         textAlign: TextAlign.center,
       ),

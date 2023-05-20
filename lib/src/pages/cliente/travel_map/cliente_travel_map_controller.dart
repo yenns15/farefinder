@@ -89,45 +89,44 @@ class ClienteTravelMapController {
       if (!isRouteReady) {
         isRouteReady = true;
         checkTravelStatus();
-       
       }
     });
   }
 
-  void pickupTravel(){
-     LatLng from = LatLng(_conductorLatLng.latitude, _conductorLatLng.longitude);
-        LatLng to = LatLng(travelInfo!.fromLat, travelInfo!.fromLng);
-        addSimpleMarker(
-        'from', to.latitude, to.longitude, 'Lugar de recogida', '', fromMarker); 
-        setPolylines(from, to);
+  void pickupTravel() {
+    LatLng from = LatLng(_conductorLatLng.latitude, _conductorLatLng.longitude);
+    LatLng to = LatLng(travelInfo!.fromLat, travelInfo!.fromLng);
+    addSimpleMarker(
+        'from', to.latitude, to.longitude, 'Lugar de recogida', '', fromMarker);
+    setPolylines(from, to);
   }
 
   void checkTravelStatus() async {
-  Stream<DocumentSnapshot> stream =
-      _travelInfoProvider.getByIdStream(_authProvider.getUser()!.uid);
-  stream.listen((DocumentSnapshot document) {
-    travelInfo = TravelInfo.fromJson(document.data() as Map<String, dynamic>);
+    Stream<DocumentSnapshot> stream =
+        _travelInfoProvider.getByIdStream(_authProvider.getUser()!.uid);
+    stream.listen((DocumentSnapshot document) {
+      travelInfo = TravelInfo.fromJson(document.data() as Map<String, dynamic>);
 
-    if (travelInfo!.status == 'accepted') {
-      currentStatus = 'Viaje aceptado';
-      colorStatus = Colors.white;
-      pickupTravel();
-    } else if (travelInfo!.status == 'started') {
-      currentStatus = 'Viaje iniciado';
-      colorStatus = Colors.amber;
-    } else if (travelInfo!.status == 'finished') {
-      currentStatus = 'Viaje finalizado';
-      colorStatus = Colors.cyan;
-    }
+      if (travelInfo!.status == 'accepted') {
+        currentStatus = 'Viaje aceptado';
+        colorStatus = Colors.white;
+        pickupTravel();
+      } else if (travelInfo!.status == 'started') {
+        currentStatus = 'Viaje iniciado';
+        colorStatus = Colors.amber;
+      } else if (travelInfo!.status == 'finished') {
+        currentStatus = 'Viaje finalizado';
+        colorStatus = Colors.cyan;
+      }
 
-    refresh();
-  });
-}
-
+      refresh();
+    });
+  }
 
   void _getTravelInfo() async {
     travelInfo =
         await _travelInfoProvider.getById(_authProvider.getUser()!.uid);
+    animateCameraToposition(travelInfo!.fromLat, travelInfo!.fromLng);
     getConductorInfo(travelInfo!.idConductor);
     getconductorLocation(travelInfo!.idConductor);
   }

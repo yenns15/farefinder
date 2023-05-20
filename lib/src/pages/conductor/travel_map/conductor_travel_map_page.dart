@@ -140,12 +140,12 @@ class _ConductorTravelMapPageState extends State<ConductorTravelMapPage> {
       alignment: Alignment.bottomCenter,
       margin: EdgeInsets.symmetric(horizontal: 60, vertical: 30),
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: _con.updateStatus,
         style: ElevatedButton.styleFrom(
           onPrimary: Colors.black,
-          primary: Colors.amber,
+          primary: _con.colorStatus,
         ),
-        child: Text('Iniciar viaje'),
+        child: Text(_con.currentStatus),
       ),
     );
   }
