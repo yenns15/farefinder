@@ -8,6 +8,7 @@ import 'package:farefinder/src/providers/geofire_provider.dart';
 import 'package:farefinder/src/providers/push_notifications_provider.dart';
 import 'package:farefinder/src/providers/travel_info_provider.dart';
 import 'package:farefinder/src/utils/my_progress_dialog.dart';
+import 'package:farefinder/src/widget/bottom_sheet_cliente_info%20.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -16,6 +17,7 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as location;
 import 'package:farefinder/src/utils/snackbar.dart' as utils;
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -130,15 +132,28 @@ class ClienteTravelMapController {
     });
   }
 
+  void openBottomSheet() {
+    if (conductor == null) return;
+    showMaterialModalBottomSheet(
+        context: context,
+        builder: (context) => BottomSheetClienteInfo(
+              imageUrl: '',
+              username: conductor!.username,
+              email: conductor!.email,
+              plate: conductor!.plate,
+            ));
+  }
+
   void startTravel() {
     if (!isStartTravel) {
       isStartTravel = true;
-       polylines = {};
+      polylines = {};
       points = [];
-    markers.removeWhere((key, markers) => markers.markerId.value == 'from');
+      markers.removeWhere((key, markers) => markers.markerId.value == 'from');
       addSimpleMarker(
           'to', travelInfo!.toLat, travelInfo!.toLng, 'Destino', '', toMarker);
-      LatLng from = new LatLng(_conductorLatLng!.latitude, _conductorLatLng!.longitude);
+      LatLng from =
+          new LatLng(_conductorLatLng!.latitude, _conductorLatLng!.longitude);
       LatLng to = new LatLng(travelInfo!.toLat, travelInfo!.toLng);
       setPolylines(from, to);
       refresh();

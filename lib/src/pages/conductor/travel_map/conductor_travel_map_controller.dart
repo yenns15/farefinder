@@ -1,15 +1,18 @@
 import 'dart:async';
 import 'dart:ffi';
 import 'package:farefinder/src/api/environment.dart';
+import 'package:farefinder/src/models/client.dart';
 import 'package:farefinder/src/models/conductor.dart';
 import 'package:farefinder/src/models/travel_info.dart';
 import 'package:farefinder/src/providers/auth_provider.dart';
+import 'package:farefinder/src/providers/client_provider.dart';
 import 'package:farefinder/src/providers/conductor_provider.dart';
 import 'package:farefinder/src/providers/geofire_provider.dart';
 import 'package:farefinder/src/providers/prices_provider.dart';
 import 'package:farefinder/src/providers/push_notifications_provider.dart';
 import 'package:farefinder/src/providers/travel_info_provider.dart';
 import 'package:farefinder/src/utils/my_progress_dialog.dart';
+import 'package:farefinder/src/widget/bottom_sheet_conductor_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -18,6 +21,7 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as location;
 import 'package:farefinder/src/utils/snackbar.dart' as utils;
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:farefinder/src/models/prices.dart';
@@ -46,6 +50,7 @@ class ConductorTravelMapController {
   late PushNotificationsProvider _pushNotificationsProvider;
   late TravelInfoProvider _travelInfoProvider;
   late PricesProvider _pricesProvider;
+  late ClientProvider _clientProvider;
 
   bool isConnect = false;
   late ProgressDialog _progressDialog;
@@ -57,6 +62,7 @@ class ConductorTravelMapController {
   List<LatLng> points = [];
 
   Conductor? conductor;
+  Client? _client;
 
   late String _idTravel;
   TravelInfo? travelInfo;
@@ -80,6 +86,7 @@ class ConductorTravelMapController {
     _travelInfoProvider = new TravelInfoProvider();
     _pushNotificationsProvider = new PushNotificationsProvider();
     _pricesProvider = new PricesProvider();
+    _clientProvider = new ClientProvider();
     _progressDialog =
         MyProgressDialog.createProgressDialog(context, 'Conectandose...');
     markerDriver = await createMarkerImageFromAsset('assets/img/uber_car.png');
@@ -89,6 +96,10 @@ class ConductorTravelMapController {
     checkGPS();
 
     getConductorInfo();
+  }
+
+  void getClientInfo() async {
+    _client = await _clientProvider.getById(_idTravel);
   }
 
   Future<double> calculatePrice() async {
@@ -181,6 +192,7 @@ class ConductorTravelMapController {
     addSimpleMarker(
         'from', to.latitude, to.longitude, 'Lugar de recogida', '', fromMarker);
     setPolylines(from, to);
+    getClientInfo();
   }
 
   Future<void> setPolylines(LatLng from, LatLng to) async {
@@ -278,6 +290,17 @@ class ConductorTravelMapController {
     } catch (error) {
       print('Error en la localizacion: $error');
     }
+  }
+
+  void openBottomSheet() {
+    if (_client == null) return;
+    showMaterialModalBottomSheet(
+        context: context,
+        builder: (context) => BottomSheetConductorInfo(
+              imageUrl: '',
+              username: _client!.username,
+              email: _client!.email,
+            ));
   }
 
   void centerPosition() {

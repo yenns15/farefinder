@@ -68,7 +68,7 @@ class _ClienteTravelMapPageState extends State<ClienteTravelMapPage> {
 
   Widget _buttonUserInfo() {
     return GestureDetector(
-      onTap: () {},
+      onTap: _con.openBottomSheet,
       child: Container(
           alignment: Alignment.centerLeft,
           margin: EdgeInsets.symmetric(horizontal: 10),
