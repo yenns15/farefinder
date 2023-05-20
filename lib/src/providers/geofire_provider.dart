@@ -31,6 +31,13 @@ class GeofireProvider {
         .set({'status': 'conductor_disponible', 'position': myLocation.data});
   }
 
+  Future<void> createWorking(String id, double lat, double lng) {
+    GeoFirePoint myLocation = _geo.point(latitude: lat, longitude: lng);
+    return _ref
+        .doc(id)
+        .set({'status': 'conductor_ocupado', 'position': myLocation.data});
+  }
+
   Future<void> delete(String id) {
     return _ref.doc(id).delete();
   }

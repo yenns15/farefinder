@@ -180,7 +180,7 @@ class ConductorTravelMapController {
   }
 
   void saveLocation() async {
-    await _geofireProvider.create(_authProvider.getUser()!.uid,
+    await _geofireProvider.createWorking(_authProvider.getUser()!.uid,
         _position!.latitude, _position!.longitude);
     _progressDialog.hide();
   }
@@ -208,7 +208,7 @@ class ConductorTravelMapController {
           LatLng to = new LatLng(travelInfo!.fromLat, travelInfo!.fromLng);
           isCloseToPickupPosition(from, to);
         }
-        // saveLocation();
+         saveLocation();
         refresh();
       });
     } catch (error) {

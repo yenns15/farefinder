@@ -1,5 +1,6 @@
 import 'package:farefinder/src/providers/auth_provider.dart';
 import 'package:farefinder/src/providers/client_provider.dart';
+import 'package:farefinder/src/providers/geofire_provider.dart';
 import 'package:farefinder/src/providers/travel_info_provider.dart';
 import 'package:farefinder/src/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,8 @@ class ConductorTravelRequestController {
   late ClientProvider _clientProvider;
   late TravelInfoProvider _travelInfoProvider;
   late AuthProvider _authProvider;
+  late GeofireProvider _geofireProvider;
+
   late Timer _timer;
   int seconds = 30;
 
@@ -31,6 +34,7 @@ class ConductorTravelRequestController {
     _clientProvider = new ClientProvider();
     _travelInfoProvider = new TravelInfoProvider();
     _authProvider = new AuthProvider();
+    _geofireProvider = new GeofireProvider();
 
     Map<String, dynamic> arguments =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
@@ -67,8 +71,10 @@ class ConductorTravelRequestController {
 
     _timer?.cancel();
     _travelInfoProvider.update(data, idCliente);
-    // Navigator.pushNamedAndRemoveUntil(context, 'conductor/travel/map', (route) => false,arguments: idCliente );
-    Navigator.pushReplacementNamed(context, 'conductor/travel/map',arguments: idCliente);
+    _geofireProvider.delete(_authProvider.getUser()!.uid);
+     Navigator.pushNamedAndRemoveUntil(context, 'conductor/travel/map', (route) => false,arguments: idCliente );
+    //Navigator.pushReplacementNamed(context, 'conductor/travel/map',
+     //   arguments: idCliente);
   }
 
   void cancelTravel() {
