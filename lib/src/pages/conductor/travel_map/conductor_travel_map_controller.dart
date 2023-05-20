@@ -70,7 +70,7 @@ class ConductorTravelMapController {
   String currentStatus = 'INICIAR VIAJE';
   Color colorStatus = Colors.amber;
 
-  late double _distanceBetween;
+  double _distanceBetween = 0.0;
   late Timer _timer;
   int seconds = 0;
   double mt = 0;

@@ -5,20 +5,17 @@ class BottomSheetClienteInfo extends StatefulWidget {
   final String username;
   final String email;
   final String plate;
-  
 
   const BottomSheetClienteInfo({
     required this.imageUrl,
     required this.username,
     required this.email,
     required this.plate,
-    
     Key? key,
   }) : super(key: key);
 
   @override
-  State<BottomSheetClienteInfo> createState() =>
-      _BottomSheetClienteInfoState();
+  State<BottomSheetClienteInfo> createState() => _BottomSheetClienteInfoState();
 }
 
 class _BottomSheetClienteInfoState extends State<BottomSheetClienteInfo> {
@@ -33,9 +30,11 @@ class _BottomSheetClienteInfoState extends State<BottomSheetClienteInfo> {
             'Tu Conductor',
             style: TextStyle(fontSize: 18),
           ),
-          SizedBox(height: 15,),
+          SizedBox(
+            height: 15,
+          ),
           CircleAvatar(
-            backgroundImage: AssetImage(widget.imageUrl),
+            backgroundImage: AssetImage('assets/img/profile.jpg'),
             radius: 50,
           ),
           ListTile(
@@ -49,7 +48,7 @@ class _BottomSheetClienteInfoState extends State<BottomSheetClienteInfo> {
             ),
             leading: Icon(Icons.person),
           ),
-           ListTile(
+          ListTile(
             title: Text(
               'correo',
               style: TextStyle(fontSize: 15),
@@ -60,11 +59,19 @@ class _BottomSheetClienteInfoState extends State<BottomSheetClienteInfo> {
             ),
             leading: Icon(Icons.email),
           ),
-          
-          
+          ListTile(
+            title: Text(
+              'Placa del vehiculo',
+              style: TextStyle(fontSize: 15),
+            ),
+            subtitle: Text(
+              widget.plate ?? '',
+              style: TextStyle(fontSize: 15),
+            ),
+            leading: Icon(Icons.directions_car_rounded),
+          ),
         ],
       ),
     );
   }
 }
-

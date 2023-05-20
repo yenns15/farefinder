@@ -4,13 +4,11 @@ class BottomSheetConductorInfo extends StatefulWidget {
   final String imageUrl;
   final String username;
   final String email;
-  
 
   const BottomSheetConductorInfo({
     required this.imageUrl,
     required this.username,
     required this.email,
-    
     Key? key,
   }) : super(key: key);
 
@@ -31,9 +29,11 @@ class _BottomSheetConductorInfoState extends State<BottomSheetConductorInfo> {
             'Tu Cliente',
             style: TextStyle(fontSize: 18),
           ),
-          SizedBox(height: 15,),
+          SizedBox(
+            height: 15,
+          ),
           CircleAvatar(
-            backgroundImage: AssetImage(widget.imageUrl),
+            backgroundImage: AssetImage('assets/img/profile.jpg'),
             radius: 50,
           ),
           ListTile(
@@ -47,7 +47,7 @@ class _BottomSheetConductorInfoState extends State<BottomSheetConductorInfo> {
             ),
             leading: Icon(Icons.person),
           ),
-           ListTile(
+          ListTile(
             title: Text(
               'Correo',
               style: TextStyle(fontSize: 15),
@@ -58,11 +58,8 @@ class _BottomSheetConductorInfoState extends State<BottomSheetConductorInfo> {
             ),
             leading: Icon(Icons.email),
           ),
-          
-          
         ],
       ),
     );
   }
 }
-
