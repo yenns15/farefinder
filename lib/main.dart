@@ -62,7 +62,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       title: 'Farefinder',
       navigatorKey: navigatorKey,
-      initialRoute: 'conductor/travel/calificaciones',
+      initialRoute: 'home',
       theme: ThemeData(
         fontFamily: 'NimbusSans',
         appBarTheme: AppBarTheme(

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ffi';
 import 'package:farefinder/src/api/environment.dart';
+import 'package:farefinder/src/models/TravelHistory.dart';
 import 'package:farefinder/src/models/client.dart';
 import 'package:farefinder/src/models/conductor.dart';
 import 'package:farefinder/src/models/travel_info.dart';
@@ -10,6 +11,7 @@ import 'package:farefinder/src/providers/conductor_provider.dart';
 import 'package:farefinder/src/providers/geofire_provider.dart';
 import 'package:farefinder/src/providers/prices_provider.dart';
 import 'package:farefinder/src/providers/push_notifications_provider.dart';
+import 'package:farefinder/src/providers/travel_history_provider.dart';
 import 'package:farefinder/src/providers/travel_info_provider.dart';
 import 'package:farefinder/src/utils/my_progress_dialog.dart';
 import 'package:farefinder/src/widget/bottom_sheet_conductor_info.dart';
@@ -51,6 +53,7 @@ class ConductorTravelMapController {
   late TravelInfoProvider _travelInfoProvider;
   late PricesProvider _pricesProvider;
   late ClientProvider _clientProvider;
+  late TravelHistoryProvider _travelHistoryProvider;
 
   bool isConnect = false;
   late ProgressDialog _progressDialog;
@@ -86,6 +89,7 @@ class ConductorTravelMapController {
     _travelInfoProvider = new TravelInfoProvider();
     _pushNotificationsProvider = new PushNotificationsProvider();
     _pricesProvider = new PricesProvider();
+    _travelHistoryProvider = new TravelHistoryProvider();
     _clientProvider = new ClientProvider();
     _progressDialog =
         MyProgressDialog.createProgressDialog(context, 'Conectandose...');
@@ -182,9 +186,27 @@ class ConductorTravelMapController {
     Map<String, dynamic> data = {'status': 'finished'};
     await _travelInfoProvider.update(data, _idTravel);
     travelInfo!.status = 'finished';
+
+    saveTravelHistory(total);
+   
+  }
+
+  void saveTravelHistory(double price) async {
+    TravelHistory travelHistory = new TravelHistory(
+      idCliente: _idTravel,
+      idConductor: _authProvider.getUser()!.uid,
+      from: travelInfo!.from,
+      to: travelInfo!.to,
+      timestamp: DateTime.now().millisecondsSinceEpoch,
+      price: price,
+    //  calificacionesCliente: 1,
+     // calificacionesConductor: 1,
+      id: '',
+    );
+    String id = await _travelHistoryProvider.create(travelHistory);
+
     Navigator.pushNamedAndRemoveUntil(
-        context, 'conductor/travel/calificaciones', (route) => false);
-    refresh();
+        context, 'conductor/travel/calificaciones', (route) => false , arguments:  id);
   }
 
   void _getTravelInfo() async {

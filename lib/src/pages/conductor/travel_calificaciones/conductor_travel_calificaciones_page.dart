@@ -1,5 +1,7 @@
+import 'package:farefinder/src/pages/conductor/travel_calificaciones/conductor_travel_calificaciones_controller.dart';
 import 'package:farefinder/src/widget/button_app.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
@@ -13,10 +15,21 @@ class ConductorTravelCalificacionesPage extends StatefulWidget {
 
 class _ConductorTravelCalificacionesPageState
     extends State<ConductorTravelCalificacionesPage> {
+  ConductorTravelCalificacionesController _con =
+      new ConductorTravelCalificacionesController();
+
+  @override
+  void initState() {
+    super.initState();
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+      _con.init(context, refresh);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       bottomNavigationBar: _buttonCalificate(),
+      bottomNavigationBar: _buttonCalificate(),
       body: Column(children: [
         _bannerPriceInfo(),
         _listTileTravelInfo(
@@ -31,21 +44,17 @@ class _ConductorTravelCalificacionesPageState
     );
   }
 
-
-
- Widget _buttonCalificate() {
+  Widget _buttonCalificate() {
     return Container(
       height: 50,
       margin: EdgeInsets.all(30),
       child: ButtonApp(
-        onPressed: (){},
+        onPressed: () {},
         text: 'CALIFICAR',
         color: Colors.amber,
       ),
     );
   }
-
-
 
   Widget _ratingBar() {
     return Center(
@@ -136,5 +145,9 @@ class _ConductorTravelCalificacionesPageState
         ),
       ),
     );
+  }
+
+  void refresh() {
+    setState(() {});
   }
 }
