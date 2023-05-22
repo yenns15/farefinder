@@ -1,7 +1,5 @@
-import 'package:farefinder/src/pages/conductor/travel_calificaciones/conductor_travel_calificaciones_controller.dart';
 import 'package:farefinder/src/widget/button_app.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
@@ -15,43 +13,47 @@ class ConductorTravelCalificacionesPage extends StatefulWidget {
 
 class _ConductorTravelCalificacionesPageState
     extends State<ConductorTravelCalificacionesPage> {
-  ConductorTravelCalificacionesController _con =
-      new ConductorTravelCalificacionesController();
-
-  @override
-  void initState() {
-    super.initState();
-    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-      _con.init(context, refresh);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: _buttonCalificate(),
-      body: Column(children: [
-        _bannerPriceInfo(),
-        _listTileTravelInfo(
-            'Desde', 'direccion de recogida', Icons.location_on),
-        _listTileTravelInfo(
-            'Hasta', 'dureccion de destino', Icons.directions_subway),
-        SizedBox(height: 30),
-        _textCalificateYourDriver(),
-        SizedBox(height: 15),
-        _ratingBar()
-      ]),
+      body: Column(
+        children: [
+          _bannerPriceInfo(),
+          _listTileTravelInfo(
+              'Desde', 'direccion de recogida', Icons.location_on),
+          _listTileTravelInfo(
+              'Hasta', 'direccion de destino', Icons.directions_subway),
+          SizedBox(height: 30),
+          Expanded(
+            child: Column(
+              children: [
+                _textCalificateYourDriver(),
+                SizedBox(height: 15),
+                _ratingBar(),
+              ],
+            ),
+          ),
+          _buttonCalificate(),
+        ],
+      ),
     );
   }
 
-  Widget _buttonCalificate() {
+  Widget  _buttonCalificate() {
     return Container(
-      height: 50,
-      margin: EdgeInsets.all(30),
-      child: ButtonApp(
+      width: double.infinity,
+      margin: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+      child: ElevatedButton(
         onPressed: () {},
-        text: 'CALIFICAR',
-        color: Colors.amber,
+        style: ElevatedButton.styleFrom(
+          primary: Colors.amber, 
+        ),
+        child: Text(
+          'CALIFICAR',
+          style: TextStyle(
+            color: Colors.black, 
+          ),
+        ),
       ),
     );
   }
@@ -59,19 +61,20 @@ class _ConductorTravelCalificacionesPageState
   Widget _ratingBar() {
     return Center(
       child: RatingBar.builder(
-          itemBuilder: (context, _) => Icon(
-                Icons.star,
-                color: Colors.amber,
-              ),
-          itemCount: 5,
-          initialRating: 0,
-          direction: Axis.horizontal,
-          allowHalfRating: true,
-          itemPadding: EdgeInsets.symmetric(horizontal: 4),
-          unratedColor: Colors.grey[300],
-          onRatingUpdate: (rating) {
-            print('RATING: $rating');
-          }),
+        itemBuilder: (context, _) => Icon(
+          Icons.star,
+          color: Colors.amber,
+        ),
+        itemCount: 5,
+        initialRating: 0,
+        direction: Axis.horizontal,
+        allowHalfRating: true,
+        itemPadding: EdgeInsets.symmetric(horizontal: 4),
+        unratedColor: Colors.grey[300],
+        onRatingUpdate: (rating) {
+          print('RATING: $rating');
+        },
+      ),
     );
   }
 
@@ -145,9 +148,5 @@ class _ConductorTravelCalificacionesPageState
         ),
       ),
     );
-  }
-
-  void refresh() {
-    setState(() {});
   }
 }
