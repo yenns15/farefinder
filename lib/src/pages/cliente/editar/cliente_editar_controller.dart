@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:farefinder/src/models/client.dart';
 import 'package:farefinder/src/providers/auth_provider.dart';
 import 'package:farefinder/src/providers/client_provider.dart';
+import 'package:farefinder/src/providers/storage_provider.dart';
 import 'package:farefinder/src/utils/my_progress_dialog.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:farefinder/src/utils/snackbar.dart' as utils;
 import 'package:image_picker/image_picker.dart';
@@ -16,109 +18,57 @@ class ClienteEditarController {
   late Function refresh;
 
   final TextEditingController usernameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController =
-      TextEditingController();
 
   late AuthProvider _authProvider;
   late ClientProvider _clientProvider;
   late ProgressDialog _progressDialog;
+  late StorageProvider _storageProvider;
 
- ImagePicker picker = ImagePicker();
- // late XFile image;
+  ImagePicker picker = ImagePicker();
+  // late XFile image;
   File? imageFile;
+  late PickedFile pickedFile;
 
   Future<void> init(BuildContext context, Function refresh) async {
     this.context = context;
     this.refresh = refresh;
     _authProvider = new AuthProvider();
     _clientProvider = new ClientProvider();
+    _storageProvider = new StorageProvider();
     _progressDialog =
         MyProgressDialog.createProgressDialog(context, 'Espere un momento');
   }
 
-  void register() async {
+  void update() async {
     final String username = usernameController.text;
-    final String email = emailController.text.trim();
-    final String confirmPassword = confirmPasswordController.text.trim();
-    final String password = passwordController.text.trim();
 
-    print('Email: $email');
-    print('Password: $password');
-
-    if (username.isEmpty &&
-        email.isEmpty &&
-        password.isEmpty &&
-        confirmPassword.isEmpty) {
+    if (username.isEmpty) {
       print('Debe ingresar todos los campos');
       utils.Snackbar.showSnackbar(
           context, key, 'Debe ingresar todos los campos');
       return;
     }
 
-    if (confirmPassword != password) {
-      utils.Snackbar.showSnackbar(context, key, 'Las contraseñas no coinciden');
-      return;
-    }
-
-    if (password.length < 6) {
-      print('La contraseña debe tener al menos 6 caracteres');
-      utils.Snackbar.showSnackbar(
-          context, key, 'La contraseña debe tener al menos 6 caracteres');
-      return;
-    }
-
     _progressDialog.show();
+    TaskSnapshot snapshot = await _storageProvider.uploadFile(pickedFile);
+    String imageUrl = await snapshot.ref.getDownloadURL();
 
-    try {
-      final bool isRegister = await _authProvider.register(email, password);
-
-      if (isRegister) {
-        final user = _authProvider.getUser();
-        if (user != null) {
-          final Client client = Client(
-              id: user.uid,
-              email: user.email?.trim() ?? '',
-              username: username,
-              password: password,
-              token: '');
-
-          await _clientProvider.create(client);
-
-          _progressDialog.hide();
-          Navigator.pushNamedAndRemoveUntil(
-              context, 'cliente/map', (route) => false);
-
-          utils.Snackbar.showSnackbar(
-              context, key, 'El usuario se registró correctamente');
-          print('El usuario se registró correctamente');
-        } else {
-          _progressDialog.hide();
-          print('No se pudo obtener información del usuario');
-        }
-      } else {
-        _progressDialog.hide();
-        print('El usuario no se pudo registrar');
-      }
-    } catch (error) {
-      _progressDialog.hide();
-      utils.Snackbar.showSnackbar(context, key, 'Error: $error');
-      print('Error: $error');
-    }
+    Map<String, dynamic> data = {'image': imageUrl
+    };
+     await _clientProvider.update(data, _authProvider.getUser()!.uid);
+    _progressDialog.hide();
+    utils.Snackbar.showSnackbar(context, key, 'Los datos se actualizaron');
   }
 
-  Future getImageFromGallery() async {
-    // PickedFile pickedFile = (await ImagePicker().getImage(source: ImageSource.gallery))!;
-    XFile? image =
-        await picker.pickImage(source: ImageSource.gallery);
+  Future<void> getImageFromGallery() async {
+    pickedFile = (await picker.getImage(source: ImageSource.gallery))!;
 
-    if (image != null && image.path.isNotEmpty) {
-  imageFile = File(image.path);
-} else {
-  print('No se seleccionó ninguna imagen');
-}
+    if (pickedFile != null && pickedFile.path.isNotEmpty) {
+      imageFile = File(pickedFile.path);
+    } else {
+      print('No se seleccionó ninguna imagen');
+    }
 
-refresh();
+    refresh();
   }
 }

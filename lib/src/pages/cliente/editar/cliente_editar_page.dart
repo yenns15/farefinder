@@ -64,7 +64,7 @@ class _ClienteEditarPageState extends State<ClienteEditarPage> {
       child: Container(
         color: utils.colors.farefinder,
         child: ElevatedButton(
-          onPressed: _con.register,
+          onPressed: _con.update,
           child: Text(
             'Actualizar',
             style: TextStyle(color: Colors.white),
