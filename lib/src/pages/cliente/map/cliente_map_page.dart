@@ -111,7 +111,7 @@ class _ClienteMapPageState extends State<ClienteMapPage> {
             trailing: Icon(Icons.edit),
             // leading: Icon(Icons.cancel),
 
-            onTap: () {},
+            onTap: _con.goToEditarPage,
           ),
           ListTile(
             title: Text('Cerrar sesión'),

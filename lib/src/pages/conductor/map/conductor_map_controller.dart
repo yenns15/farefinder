@@ -77,6 +77,9 @@ class ConductorMapController {
   void openDrawer() {
     key.currentState?.openDrawer();
   }
+  void goToEditarPage() {
+    Navigator.pushNamed(context, 'conductor/editar');
+  }
 
   void dispose() {
     _positionStream?.cancel();

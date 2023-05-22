@@ -94,7 +94,7 @@ class _ConductorMapPageState extends State<ConductorMapPage> {
             trailing: Icon(Icons.edit),
            // leading: Icon(Icons.cancel),
 
-            onTap: () { },
+            onTap: _con.goToEditarPage,
           ),
            ListTile(
             title: Text('Cerrar sesión'),

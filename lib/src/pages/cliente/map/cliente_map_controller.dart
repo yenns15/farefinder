@@ -213,6 +213,10 @@ class ClienteMapController {
     }
   }
 
+  void goToEditarPage() {
+    Navigator.pushNamed(context, 'cliente/editar');
+  }
+
   void saveToken() {
     _pushNotificationsProvider.saveToken(
         _authProvider.getUser()!.uid, 'Clients');
