@@ -5,7 +5,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:farefinder/src/utils/colors.dart' as utils;
 
-
 class ClienteEditarPage extends StatefulWidget {
   const ClienteEditarPage({Key? key}) : super(key: key);
 
@@ -34,16 +33,23 @@ class _ClienteEditarPageState extends State<ClienteEditarPage> {
         iconTheme: IconThemeData(color: Colors.white),
         backgroundColor: Color.fromARGB(255, 7, 7, 7),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            _bannerApp(),
-            _textLogin(),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.08),
-            _textFieldUsername(),
-            Expanded(child: SizedBox()),
-            _buttonRegister(),
-          ],
+      body: Container(
+        height: MediaQuery.of(context).size.height -
+            AppBar().preferredSize.height -
+            MediaQuery.of(context).padding.top -
+            MediaQuery.of(context).padding.bottom,
+            
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              _bannerApp(),
+              _textLogin(),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.08),
+              _textFieldUsername(),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.4),
+              _buttonRegister(),
+            ],
+          ),
         ),
       ),
     );
@@ -52,7 +58,8 @@ class _ClienteEditarPageState extends State<ClienteEditarPage> {
   Widget _buttonRegister() {
     return Container(
       height: 50,
-      width: MediaQuery.of(context).size.width * 0.8, // Ajusta el ancho del botón según tus necesidades
+      width: MediaQuery.of(context).size.width *
+          0.8, // Ajusta el ancho del botón según tus necesidades
       margin: EdgeInsets.symmetric(horizontal: 30, vertical: 25),
       child: Container(
         color: utils.colors.farefinder,
@@ -63,7 +70,8 @@ class _ClienteEditarPageState extends State<ClienteEditarPage> {
             style: TextStyle(color: Colors.white),
           ),
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+            backgroundColor:
+                MaterialStateProperty.all<Color>(Colors.transparent),
           ),
         ),
       ),
@@ -129,4 +137,3 @@ class _ClienteEditarPageState extends State<ClienteEditarPage> {
     );
   }
 }
-
