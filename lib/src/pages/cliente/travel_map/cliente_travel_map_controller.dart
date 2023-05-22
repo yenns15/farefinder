@@ -59,6 +59,7 @@ class ClienteTravelMapController {
   bool isRouteReady = false;
   bool isPickupTravel = false;
   bool isStartTravel = false;
+  bool isFinishTravel = false;
 
   late String currentStatus = '';
   Color colorStatus = Colors.white;
@@ -127,6 +128,7 @@ class ClienteTravelMapController {
       } else if (travelInfo!.status == 'finished') {
         currentStatus = 'Viaje finalizado';
         colorStatus = Colors.cyan;
+        finishTravel();
       }
 
       refresh();
@@ -143,6 +145,15 @@ class ClienteTravelMapController {
               email: conductor!.email,
               plate: conductor!.plate,
             ));
+  }
+
+  void finishTravel() {
+    if (!isFinishTravel) {
+      isFinishTravel = true;
+      Navigator.pushNamedAndRemoveUntil(
+          context, 'cliente/travel/calificaciones', (route) => false,
+          arguments: travelInfo!.idTravelHistory);
+    }
   }
 
   void startTravel() {

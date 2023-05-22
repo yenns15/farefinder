@@ -183,30 +183,37 @@ class ConductorTravelMapController {
   void finishTravel() async {
     _timer?.cancel();
     double total = await calculatePrice();
-    Map<String, dynamic> data = {'status': 'finished'};
-    await _travelInfoProvider.update(data, _idTravel);
-    travelInfo!.status = 'finished';
 
     saveTravelHistory(total);
-   
   }
 
   void saveTravelHistory(double price) async {
-    TravelHistory travelHistory =  TravelHistory(
+    TravelHistory travelHistory = TravelHistory(
       idCliente: _idTravel,
       idConductor: _authProvider.getUser()!.uid,
       from: travelInfo!.from,
       to: travelInfo!.to,
       timestamp: DateTime.now().millisecondsSinceEpoch,
       price: price,
-     calificacionesCliente: '',
+      calificacionesCliente: '',
       calificacionesConductor: '',
       id: '',
     );
+
     String id = await _travelHistoryProvider.create(travelHistory);
 
+    Map<String, dynamic> data = {'status': 'finished', 
+    'idTravelHistory': id,
+     'price': price
+    
+    };
+
+    await _travelInfoProvider.update(data, _idTravel);
+    travelInfo!.status = 'finished';
+
     Navigator.pushNamedAndRemoveUntil(
-        context, 'conductor/travel/calificaciones', (route) => false , arguments:  id);
+        context, 'conductor/travel/calificaciones', (route) => false,
+        arguments: id);
   }
 
   void _getTravelInfo() async {

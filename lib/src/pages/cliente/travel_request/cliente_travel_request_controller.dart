@@ -115,6 +115,9 @@ class ClienteTravelRequestController {
       toLng: toLatLng.longitude,
       status: 'created',
       idConductor: '',
+     idTravelHistory: '', 
+     price: 1,
+      
     );
 
     await _travelInfoProvider.create(travelInfo);
