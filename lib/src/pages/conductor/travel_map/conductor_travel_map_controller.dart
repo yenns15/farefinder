@@ -192,15 +192,15 @@ class ConductorTravelMapController {
   }
 
   void saveTravelHistory(double price) async {
-    TravelHistory travelHistory = new TravelHistory(
+    TravelHistory travelHistory =  TravelHistory(
       idCliente: _idTravel,
       idConductor: _authProvider.getUser()!.uid,
       from: travelInfo!.from,
       to: travelInfo!.to,
       timestamp: DateTime.now().millisecondsSinceEpoch,
       price: price,
-    //  calificacionesCliente: 1,
-     // calificacionesConductor: 1,
+     calificacionesCliente: '',
+      calificacionesConductor: '',
       id: '',
     );
     String id = await _travelHistoryProvider.create(travelHistory);

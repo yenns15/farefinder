@@ -12,8 +12,8 @@ class TravelHistory {
     String to;
     int timestamp;
     double price;
-   // double calificacionesCliente;
-   // double calificacionesConductor;
+    String calificacionesCliente;
+    String calificacionesConductor;
 
     TravelHistory({
         required this.id,
@@ -23,8 +23,8 @@ class TravelHistory {
         required this.to,
         required this.timestamp,
         required this.price,
-      //  required this.calificacionesCliente,
-       // required this.calificacionesConductor,
+        required this.calificacionesCliente,
+        required this.calificacionesConductor,
     });
 
     factory TravelHistory.fromJson(Map<String, dynamic> json) => TravelHistory(
@@ -35,8 +35,8 @@ class TravelHistory {
         to: json["to"],
         timestamp: json["timestamp"],
         price: json["price"]?.toDouble(),
-   //     calificacionesCliente: json["calificacionesCliente"]?.toDouble(),
-    //    calificacionesConductor: json["calificacionesConductor"]?.toDouble(),
+       calificacionesCliente: json["calificacionesCliente"],
+        calificacionesConductor: json["calificacionesConductor"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -47,7 +47,7 @@ class TravelHistory {
         "to": to,
         "timestamp": timestamp,
         "price": price,
-     //   "calificacionesCliente": calificacionesCliente,
-     //   "calificacionesConductor": calificacionesConductor,
+        "calificacionesCliente": calificacionesCliente,
+        "calificacionesConductor": calificacionesConductor,
     };
 }
