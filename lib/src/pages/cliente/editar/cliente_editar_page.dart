@@ -21,7 +21,7 @@ class _ClienteEditarPageState extends State<ClienteEditarPage> {
     print('INIT STATE');
 
     SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
-      _con.init(context);
+      _con.init(context,refresh);
     });
   }
 
@@ -110,7 +110,7 @@ class _ClienteEditarPageState extends State<ClienteEditarPage> {
     );
   }
 
-  Widget _bannerApp() {
+  Widget _bannerApp(){
     return ClipPath(
       clipper: WaveClipperTwo(),
       child: Container(
@@ -120,9 +120,18 @@ class _ClienteEditarPageState extends State<ClienteEditarPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            CircleAvatar(
-              backgroundImage: AssetImage('assets/img/profile.jpg'),
-              radius: 50,
+            GestureDetector(
+              onTap: _con.getImageFromGallery,
+              child: CircleAvatar(
+              backgroundImage: _con.imageFile != null 
+               ? FileImage(_con.imageFile!)
+               : AssetImage('assets/img/profile.jpg') as ImageProvider,
+                radius: 50,
+                ),
+
+
+
+
             ),
             Container(
               margin: EdgeInsets.only(top: 30),
@@ -135,5 +144,10 @@ class _ClienteEditarPageState extends State<ClienteEditarPage> {
         ),
       ),
     );
+  }
+  void refresh(){
+    setState(() {
+      
+    });
   }
 }

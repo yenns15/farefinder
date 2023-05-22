@@ -1,31 +1,41 @@
+import 'dart:io';
+
 import 'package:farefinder/src/models/client.dart';
 import 'package:farefinder/src/providers/auth_provider.dart';
 import 'package:farefinder/src/providers/client_provider.dart';
 import 'package:farefinder/src/utils/my_progress_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:farefinder/src/utils/snackbar.dart' as utils;
+import 'package:image_picker/image_picker.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
-
+import 'package:image_picker/image_picker.dart';
 
 class ClienteEditarController {
   late BuildContext context;
   final GlobalKey<ScaffoldState> key = GlobalKey<ScaffoldState>();
+  late Function refresh;
 
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
 
   late AuthProvider _authProvider;
   late ClientProvider _clientProvider;
   late ProgressDialog _progressDialog;
 
+ ImagePicker picker = ImagePicker();
+ // late XFile image;
+  File? imageFile;
 
-  Future<void> init(BuildContext context) async {
+  Future<void> init(BuildContext context, Function refresh) async {
     this.context = context;
-     _authProvider = new AuthProvider();
+    this.refresh = refresh;
+    _authProvider = new AuthProvider();
     _clientProvider = new ClientProvider();
-    _progressDialog = MyProgressDialog.createProgressDialog(context,'Espere un momento');
+    _progressDialog =
+        MyProgressDialog.createProgressDialog(context, 'Espere un momento');
   }
 
   void register() async {
@@ -37,20 +47,25 @@ class ClienteEditarController {
     print('Email: $email');
     print('Password: $password');
 
-    if (username.isEmpty && email.isEmpty && password.isEmpty && confirmPassword.isEmpty) {
+    if (username.isEmpty &&
+        email.isEmpty &&
+        password.isEmpty &&
+        confirmPassword.isEmpty) {
       print('Debe ingresar todos los campos');
-     utils.Snackbar.showSnackbar(context, key, 'Debe ingresar todos los campos');
+      utils.Snackbar.showSnackbar(
+          context, key, 'Debe ingresar todos los campos');
       return;
     }
 
     if (confirmPassword != password) {
-       utils.Snackbar.showSnackbar(context, key, 'Las contraseñas no coinciden');
+      utils.Snackbar.showSnackbar(context, key, 'Las contraseñas no coinciden');
       return;
     }
 
     if (password.length < 6) {
       print('La contraseña debe tener al menos 6 caracteres');
-     utils.Snackbar.showSnackbar(context, key, 'La contraseña debe tener al menos 6 caracteres');
+      utils.Snackbar.showSnackbar(
+          context, key, 'La contraseña debe tener al menos 6 caracteres');
       return;
     }
 
@@ -67,14 +82,16 @@ class ClienteEditarController {
               email: user.email?.trim() ?? '',
               username: username,
               password: password,
-               token: '');
+              token: '');
 
           await _clientProvider.create(client);
 
           _progressDialog.hide();
-          Navigator.pushNamedAndRemoveUntil(context, 'cliente/map',(route) => false);
+          Navigator.pushNamedAndRemoveUntil(
+              context, 'cliente/map', (route) => false);
 
-          utils.Snackbar.showSnackbar(context, key, 'El usuario se registró correctamente');
+          utils.Snackbar.showSnackbar(
+              context, key, 'El usuario se registró correctamente');
           print('El usuario se registró correctamente');
         } else {
           _progressDialog.hide();
@@ -90,5 +107,18 @@ class ClienteEditarController {
       print('Error: $error');
     }
   }
+
+  Future getImageFromGallery() async {
+    // PickedFile pickedFile = (await ImagePicker().getImage(source: ImageSource.gallery))!;
+    XFile? image =
+        await picker.pickImage(source: ImageSource.gallery);
+
+    if (image != null && image.path.isNotEmpty) {
+  imageFile = File(image.path);
+} else {
+  print('No se seleccionó ninguna imagen');
 }
 
+refresh();
+  }
+}
