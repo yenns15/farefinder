@@ -328,7 +328,7 @@ class ConductorTravelMapController {
     showMaterialModalBottomSheet(
         context: context,
         builder: (context) => BottomSheetConductorInfo(
-              imageUrl: '',
+              imageUrl: _client!.image,
               username: _client!.username,
               email: _client!.email,
             ));

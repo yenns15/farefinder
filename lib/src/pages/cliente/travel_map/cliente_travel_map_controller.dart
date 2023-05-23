@@ -140,7 +140,7 @@ class ClienteTravelMapController {
     showMaterialModalBottomSheet(
         context: context,
         builder: (context) => BottomSheetClienteInfo(
-              imageUrl: '',
+              imageUrl: conductor!.image,
               username: conductor!.username,
               email: conductor!.email,
               plate: conductor!.plate,

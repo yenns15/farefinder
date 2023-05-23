@@ -33,7 +33,9 @@ class _BottomSheetConductorInfoState extends State<BottomSheetConductorInfo> {
             height: 15,
           ),
           CircleAvatar(
-            backgroundImage: AssetImage('assets/img/profile.jpg'),
+            backgroundImage: widget.imageUrl != null
+                     ? NetworkImage(widget.imageUrl)
+                     : AssetImage('assets/img/profile.jpg') as ImageProvider,
             radius: 50,
           ),
           ListTile(

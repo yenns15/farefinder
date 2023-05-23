@@ -80,7 +80,10 @@ class _ConductorMapPageState extends State<ConductorMapPage> {
                 )),
                 SizedBox(height: 10),
                 CircleAvatar(
-                  backgroundImage: AssetImage('assets/img/profile.jpg'),
+                  backgroundImage:  
+                 _con.conductor?.image != null
+                     ? NetworkImage(_con.conductor!.image)
+                     : AssetImage('assets/img/profile.jpg') as ImageProvider,
                   radius: 40,
                 )
               ],
