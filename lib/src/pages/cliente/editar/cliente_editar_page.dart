@@ -121,7 +121,7 @@ class _ClienteEditarPageState extends State<ClienteEditarPage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             GestureDetector(
-              onTap: _con.getImageFromGallery,
+              onTap: _con.showAlertDialog,
               child: CircleAvatar(
               backgroundImage: _con.imageFile != null 
                ? FileImage(_con.imageFile!)

@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:farefinder/src/models/client.dart';
 import 'package:farefinder/src/providers/auth_provider.dart';
 import 'package:farefinder/src/providers/client_provider.dart';
 import 'package:farefinder/src/providers/storage_provider.dart';
@@ -10,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:farefinder/src/utils/snackbar.dart' as utils;
 import 'package:image_picker/image_picker.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
-import 'package:image_picker/image_picker.dart';
+
 
 class ClienteEditarController {
   late BuildContext context;
@@ -39,6 +37,31 @@ class ClienteEditarController {
         MyProgressDialog.createProgressDialog(context, 'Espere un momento');
   }
 
+  void showAlertDialog() {
+    Widget galleryButton = TextButton(
+        onPressed: () {
+          getImageFromGallery(ImageSource.gallery);
+        },
+        child: Text('GALERIA'));
+
+    Widget cameraButton = TextButton(
+        onPressed: () {
+          getImageFromGallery(ImageSource.camera);
+        },
+        child: Text('CAMARA'));
+
+    AlertDialog alertDialog = AlertDialog(
+      title: Text('Selecciona tu imagen'),
+      actions: [galleryButton, cameraButton],
+    );
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alertDialog;
+        });
+  }
+
   void update() async {
     final String username = usernameController.text;
 
@@ -53,22 +76,21 @@ class ClienteEditarController {
     TaskSnapshot snapshot = await _storageProvider.uploadFile(pickedFile);
     String imageUrl = await snapshot.ref.getDownloadURL();
 
-    Map<String, dynamic> data = {'image': imageUrl
-    };
-     await _clientProvider.update(data, _authProvider.getUser()!.uid);
+    Map<String, dynamic> data = {'image': imageUrl};
+    await _clientProvider.update(data, _authProvider.getUser()!.uid);
     _progressDialog.hide();
     utils.Snackbar.showSnackbar(context, key, 'Los datos se actualizaron');
   }
 
-  Future<void> getImageFromGallery() async {
-    pickedFile = (await picker.getImage(source: ImageSource.gallery))!;
+  Future<void> getImageFromGallery(ImageSource imageSource) async {
+    pickedFile = (await picker.getImage(source: imageSource))!;
 
     if (pickedFile != null && pickedFile.path.isNotEmpty) {
       imageFile = File(pickedFile.path);
     } else {
       print('No se seleccionó ninguna imagen');
     }
-
+    Navigator.pop(context);
     refresh();
   }
 }
