@@ -121,22 +121,20 @@ class _ClienteEditarPageState extends State<ClienteEditarPage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             GestureDetector(
-              onTap: _con.getImageFromGallery,
+              onTap: _con.showAlertDialog,
               child: CircleAvatar(
-              backgroundImage: _con.imageFile != null 
-               ? FileImage(_con.imageFile!)
-               : AssetImage('assets/img/profile.jpg') as ImageProvider,
+              backgroundImage:  _con.imageFile != null ?
+               FileImage(_con.imageFile!) :
+               _con.client?.image != null
+                   ? NetworkImage(_con.client!.image)
+                   : AssetImage('assets/img/profile.jpg') as ImageProvider,
                 radius: 50,
                 ),
-
-
-
-
             ),
             Container(
               margin: EdgeInsets.only(top: 30),
               child: Text(
-                'Nuestro servicio tu destino',
+                _con.client?.email ?? '',
                 style: TextStyle(color: Colors.white),
               ),
             ),

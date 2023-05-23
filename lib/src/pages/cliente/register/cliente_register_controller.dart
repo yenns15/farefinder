@@ -67,7 +67,9 @@ class ClienteRegisterController {
               email: user.email?.trim() ?? '',
               username: username,
               password: password,
-               token: '');
+               token: '',
+                image: ''
+               );
 
           await _clientProvider.create(client);
 

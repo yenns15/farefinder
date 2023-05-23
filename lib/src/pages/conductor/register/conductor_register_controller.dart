@@ -86,7 +86,8 @@ class ConductorRegisterController {
               username: username,
               password: password,
               plate : plate, 
-              token: ''
+              token: '',
+              image: ''
               );
 
           await _conductorProvider.create(conductor);

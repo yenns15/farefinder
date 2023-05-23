@@ -10,23 +10,25 @@ class Client {
   String email;
   String password;
   String token;
+  String image;
 
-
-  Client({
-    required this.id,
-    required this.username,
-    required this.email,
-    required this.password,
-    required this.token
-  });
+  Client(
+      {required this.id,
+      required this.username,
+      required this.email,
+      required this.password,
+      required this.token,
+      required this.image
+      
+      });
 
   factory Client.fromJson(Map<String, dynamic> json) => Client(
-        id: json["id"]??'',
-        username: json["username"]??'',
-        email: json["email"]??'',
-        password: json["password"]??'',
-        token: json["token"]??''
-
+      id: json["id"] ?? '',
+      username: json["username"] ?? '',
+      email: json["email"] ?? '',
+      password: json["password"] ?? '',
+      token: json["token"] ?? '',
+      image: json["image"] ?? ''
       );
 
   Map<String, dynamic> toJson() => {
@@ -34,6 +36,6 @@ class Client {
         "username": username,
         "email": email,
         "token": token,
-       
+        "image": image
       };
 }

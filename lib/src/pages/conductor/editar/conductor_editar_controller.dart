@@ -86,7 +86,8 @@ class ConductorEditarController {
               username: username,
               password: password,
               plate : plate, 
-              token: ''
+              token: '', 
+              image: ''
               );
 
           await _conductorProvider.create(conductor);
