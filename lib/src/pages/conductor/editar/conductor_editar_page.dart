@@ -23,7 +23,7 @@ class _ConductorEditarPageState extends State<ConductorEditarPage> {
     print('INIT STATE');
 
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-      _con.init(context);
+      _con.init(context, refresh);
     });
   }
 
@@ -75,7 +75,7 @@ Widget _buttonRegister() {
       height: 50,
       margin: EdgeInsets.symmetric(horizontal: 30, vertical: 30),
       child: ElevatedButton(
-        onPressed: _con.register,
+        onPressed: _con.update,
         child: Text(
           'Actualizar',
           style: TextStyle(color: Colors.white),
@@ -142,18 +142,30 @@ Widget _buttonRegister() {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            CircleAvatar(
-              backgroundImage: AssetImage('assets/img/profile.jpg'),
-              radius: 50,
+            GestureDetector(
+              onTap: _con.showAlertDialog,
+              child: CircleAvatar(
+                backgroundImage:  _con.imageFile != null ?
+                 FileImage(_con.imageFile!) :
+                 _con.conductor?.image != null
+                     ? NetworkImage(_con.conductor!.image)
+                     : AssetImage('assets/img/profile.jpg') as ImageProvider,
+                  radius: 50,
+              ),
             ),
             Container(
               margin: EdgeInsets.only(top: 30),
-              child: Text('Nuestro servicio tu destino',
+              child: Text(_con.conductor?.email ?? '',
                   style: TextStyle(color: Colors.white)),
             )
           ],
         ),
       ),
     );
+  }
+   void refresh(){
+    setState(() {
+      
+    });
   }
 }

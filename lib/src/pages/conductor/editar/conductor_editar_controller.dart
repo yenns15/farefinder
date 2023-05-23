@@ -1,113 +1,149 @@
+import 'dart:io';
+
 import 'package:farefinder/src/models/conductor.dart';
 import 'package:farefinder/src/providers/auth_provider.dart';
 import 'package:farefinder/src/providers/conductor_provider.dart';
+import 'package:farefinder/src/providers/storage_provider.dart';
 import 'package:farefinder/src/utils/my_progress_dialog.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:farefinder/src/utils/snackbar.dart' as utils;
+import 'package:image_picker/image_picker.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
-
 
 class ConductorEditarController {
   late BuildContext context;
-   GlobalKey<ScaffoldState> key = GlobalKey<ScaffoldState>();
+  GlobalKey<ScaffoldState> key = GlobalKey<ScaffoldState>();
 
-    TextEditingController usernameController = TextEditingController();
-    TextEditingController emailController = TextEditingController();
-    TextEditingController passwordController = TextEditingController();
-    TextEditingController confirmPasswordController = TextEditingController();
-    TextEditingController pin1Controller = TextEditingController();
-    TextEditingController pin2Controller = TextEditingController();
-    TextEditingController pin3Controller = TextEditingController();
-    TextEditingController pin4Controller = TextEditingController();
-    TextEditingController pin5Controller = TextEditingController();
-    TextEditingController pin6Controller = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
 
+  TextEditingController pin1Controller = TextEditingController();
+  TextEditingController pin2Controller = TextEditingController();
+  TextEditingController pin3Controller = TextEditingController();
+  TextEditingController pin4Controller = TextEditingController();
+  TextEditingController pin5Controller = TextEditingController();
+  TextEditingController pin6Controller = TextEditingController();
 
-  late  AuthProvider _authProvider;
+  late AuthProvider _authProvider;
   late ConductorProvider _conductorProvider;
+  late StorageProvider _storageProvider;
   late ProgressDialog _progressDialog;
 
-  Future<void> init(BuildContext context) async {
+  ImagePicker picker = ImagePicker();
+  File? imageFile;
+  PickedFile? pickedFile;
+
+  Conductor? conductor;
+
+  late Function refresh;
+
+  Future<void> init(BuildContext context, Function refresh) async {
     this.context = context;
+    this.refresh = refresh;
     _authProvider = new AuthProvider();
     _conductorProvider = new ConductorProvider();
-    _progressDialog = MyProgressDialog.createProgressDialog(context,'Espere un momento');
+    _storageProvider = new StorageProvider();
+    _progressDialog =
+        MyProgressDialog.createProgressDialog(context, 'Espere un momento');
+    getUserInfo();
   }
 
-  void register() async {
-      String username = usernameController.text;
-      String email = emailController.text.trim();
-      String confirmPassword = confirmPasswordController.text.trim();
-      String password = passwordController.text.trim();
+  Future<void> getUserInfo() async {
+    conductor = await _conductorProvider.getById(_authProvider.getUser()!.uid);
+    usernameController.text = conductor!.username;
 
-      String pin1 = pin1Controller.text.trim();
-      String pin2 = pin2Controller.text.trim();
-      String pin3 = pin3Controller.text.trim();
-      String pin4 = pin4Controller.text.trim();
-      String pin5 = pin5Controller.text.trim();
-      String pin6 = pin6Controller.text.trim();
+    pin1Controller.text = conductor!.plate[0];
+    pin2Controller.text = conductor!.plate[1];
+    pin3Controller.text = conductor!.plate[2];
+    pin4Controller.text = conductor!.plate[4];
+    pin5Controller.text = conductor!.plate[5];
+    pin6Controller.text = conductor!.plate[6];
 
-      String plate = '$pin1$pin2$pin3-$pin4$pin5$pin6';
+    refresh();
+  }
 
-    
+  void showAlertDialog() {
+    Widget galleryButton = TextButton(
+        onPressed: () {
+          getImageFromGallery(ImageSource.gallery);
+        },
+        child: Text('GALERIA'));
 
-    print('Email: $email');
-    print('Password: $password');
+    Widget cameraButton = TextButton(
+        onPressed: () {
+          getImageFromGallery(ImageSource.camera);
+        },
+        child: Text('CAMARA'));
 
-    if (username.isEmpty && email.isEmpty && password.isEmpty && confirmPassword.isEmpty) {
+    AlertDialog alertDialog = AlertDialog(
+      title: Text('Selecciona tu imagen'),
+      actions: [galleryButton, cameraButton],
+    );
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alertDialog;
+        });
+  }
+
+  Future<void> getImageFromGallery(ImageSource imageSource) async {
+    pickedFile = await picker.getImage(source: imageSource);
+
+    if (pickedFile != null && pickedFile!.path.isNotEmpty) {
+      imageFile = File(pickedFile!.path);
+    } else {
+      print('No se seleccionó ninguna imagen');
+    }
+    Navigator.pop(context);
+    refresh();
+  }
+
+  void update() async {
+    String username = usernameController.text;
+
+    String pin1 = pin1Controller.text.trim();
+    String pin2 = pin2Controller.text.trim();
+    String pin3 = pin3Controller.text.trim();
+    String pin4 = pin4Controller.text.trim();
+    String pin5 = pin5Controller.text.trim();
+    String pin6 = pin6Controller.text.trim();
+
+    String plate = '$pin1$pin2$pin3-$pin4$pin5$pin6';
+
+    if (username.isEmpty) {
       print('Debe ingresar todos los campos');
-     utils.Snackbar.showSnackbar(context, key, 'Debe ingresar todos los campos');
-      return;
-    }
-
-    if (confirmPassword != password) {
-       utils.Snackbar.showSnackbar(context, key, 'Las contraseñas no coinciden');
-      return;
-    }
-
-    if (password.length < 6) {
-      print('La contraseña debe tener al menos 6 caracteres');
-     utils.Snackbar.showSnackbar(context, key, 'La contraseña debe tener al menos 6 caracteres');
+      utils.Snackbar.showSnackbar(
+          context, key, 'Debe ingresar todos los campos');
       return;
     }
 
     _progressDialog.show();
 
-    try {
-     bool isRegister = await _authProvider.register(email, password);
+    if (pickedFile == null) {
+      Map<String, dynamic> data = {
+        'username': username,
+         'plate': plate,
+      };
 
-      if (isRegister) {
-
-        final user = _authProvider.getUser();
-        if (user != null) {
-          Conductor conductor = Conductor(
-              id: user.uid,
-              email: user.email?.trim() ?? '',
-              username: username,
-              password: password,
-              plate : plate, 
-              token: '', 
-              image: ''
-              );
-
-          await _conductorProvider.create(conductor);
-          _progressDialog.hide();
-          Navigator.pushNamedAndRemoveUntil(context, 'conductor/map',(route) => false);
-
-          utils.Snackbar.showSnackbar(context, key, 'El Conductor se registró correctamente');
-          print('El Conductor se registró correctamente');
-        } else {
-          _progressDialog.hide();
-          print('No se pudo obtener información del usuario');
-        }
-      } else {
-        _progressDialog.hide();
-        print('El Conductor no se pudo registrar');
-      }
-    } catch (error) {
+      await _conductorProvider.update(data, _authProvider.getUser()!.uid);
       _progressDialog.hide();
-      utils.Snackbar.showSnackbar(context, key, 'Error: $error');
-      print('Error: $error');
+      refresh();
+    } else {
+      TaskSnapshot snapshot = await _storageProvider.uploadFile(pickedFile!);
+      String imageUrl = await snapshot.ref.getDownloadURL();
+      Map<String, dynamic> data = {
+        'image': imageUrl,
+        'username': username,
+         'plate': plate,
+      };
+
+      await _conductorProvider.update(data, _authProvider.getUser()!.uid);
     }
+
+    _progressDialog.hide();
+
+    utils.Snackbar.showSnackbar(context, key, 'Los datos se actualizaron');
+    refresh();
   }
 }
