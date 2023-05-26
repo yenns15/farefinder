@@ -1,6 +1,6 @@
 import 'package:farefinder/src/providers/travel_history_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:farefinder/src/models/TravelHistory.dart';
+import 'package:farefinder/src/models/travel_history.dart';
 import 'package:farefinder/src/utils/snackbar.dart' as utils;
 
 class ConductorTravelCalificacionesController {

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:ffi';
 import 'package:farefinder/src/api/environment.dart';
-import 'package:farefinder/src/models/TravelHistory.dart';
+import 'package:farefinder/src/models/travel_history.dart';
 import 'package:farefinder/src/models/client.dart';
 import 'package:farefinder/src/models/conductor.dart';
 import 'package:farefinder/src/models/travel_info.dart';

@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:farefinder/src/models/TravelHistory.dart';
+import 'package:farefinder/src/models/travel_history.dart';
 
 
 class TravelHistoryProvider {
