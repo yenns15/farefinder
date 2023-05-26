@@ -81,6 +81,10 @@ class ConductorMapController {
     Navigator.pushNamed(context, 'conductor/editar');
   }
 
+   void goToHistoryPage() {
+    Navigator.pushNamed(context, 'conductor/historial');
+  }
+
   void dispose() {
     _positionStream?.cancel();
     _statusSuscription?.cancel();

@@ -99,6 +99,13 @@ class _ConductorMapPageState extends State<ConductorMapPage> {
 
             onTap: _con.goToEditarPage,
           ),
+          ListTile(
+            title: Text('Hstorial de viajes'),
+            trailing: Icon(Icons.timer),
+            // leading: Icon(Icons.cancel),
+
+            onTap: _con.goToHistoryPage,
+          ),
            ListTile(
             title: Text('Cerrar sesión'),
             trailing: Icon(Icons.power_settings_new),
