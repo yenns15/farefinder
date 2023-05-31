@@ -118,8 +118,12 @@ Widget _buttonCancel() {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CircleAvatar(
-              radius: 50,
-              backgroundImage: AssetImage('assets/img/profile.jpg'),
+              backgroundImage:  _con.imageFile != null ?
+                 FileImage(_con.imageFile!) :
+                 _con.conductor?.image != null
+                     ? NetworkImage(_con.conductor!.image)
+                     : AssetImage('assets/img/profile.jpg') as ImageProvider,
+                  radius: 50,
             ),
             Container(
               margin: EdgeInsets.symmetric(vertical: 10),

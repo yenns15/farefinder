@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:farefinder/src/providers/auth_provider.dart';
 import 'package:farefinder/src/providers/client_provider.dart';
 import 'package:farefinder/src/providers/geofire_provider.dart';
@@ -16,6 +18,7 @@ class ConductorTravelRequestController {
   late String to;
   late String idCliente;
   late Client client;
+  File? imageFile;
 
   late ClientProvider _clientProvider;
   late TravelInfoProvider _travelInfoProvider;

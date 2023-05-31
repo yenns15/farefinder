@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:farefinder/src/models/travel_info.dart';
@@ -21,6 +22,8 @@ class ClienteTravelRequestController {
   late String to;
   late LatLng fromLatLng;
   late LatLng toLatLng;
+   File? imageFile;
+   Conductor? conductor;
 
   late TravelInfoProvider _travelInfoProvider;
   late AuthProvider _authProvider;
