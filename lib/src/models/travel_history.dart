@@ -5,6 +5,18 @@ TravelHistory travelHistoryFromJson(String str) => TravelHistory.fromJson(json.d
 String travelHistoryToJson(TravelHistory data) => json.encode(data.toJson());
 
 class TravelHistory {
+   TravelHistory({
+      required this.id,
+      required this.idCliente,
+      required this.idConductor,
+      required this.from,
+      required this.to,
+      required this.timestamp,
+      required this.price,
+      required this.calificacionesCliente,
+      required this.calificacionesConductor,
+    });
+    
     String id;
     String idCliente;
     String idConductor;
@@ -15,17 +27,7 @@ class TravelHistory {
     String calificacionesCliente;
     String calificacionesConductor;
 
-    TravelHistory({
-        required this.id,
-        required this.idCliente,
-        required this.idConductor,
-        required this.from,
-        required this.to,
-        required this.timestamp,
-        required this.price,
-        required this.calificacionesCliente,
-        required this.calificacionesConductor,
-    });
+   
 
     factory TravelHistory.fromJson(Map<String, dynamic> json) => TravelHistory(
         id: json["id"],
