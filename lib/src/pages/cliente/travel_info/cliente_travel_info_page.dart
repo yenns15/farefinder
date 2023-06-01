@@ -102,8 +102,8 @@ class _ClienteTravelInfoPageState extends State<ClienteTravelInfoPage> {
             child: ButtonApp(
               onPressed: _con.goToRequest,
               text: 'CONFIRMAR',
-              textColor: Colors.black,
-              color: Colors.amber,
+              textColor: Colors.white,
+              color: Colors.black,
             ),
           )
         ],
@@ -118,7 +118,7 @@ class _ClienteTravelInfoPageState extends State<ClienteTravelInfoPage> {
       padding: EdgeInsets.symmetric(horizontal: 30),
       margin: EdgeInsets.only(right: 10, top: 10),
       decoration: BoxDecoration(
-          color: Colors.amber,
+          color: Colors.white,
           borderRadius: BorderRadius.all(Radius.circular(20))),
       child: Text(
         km ?? '0 Km',
@@ -134,7 +134,7 @@ class _ClienteTravelInfoPageState extends State<ClienteTravelInfoPage> {
       padding: EdgeInsets.symmetric(horizontal: 30),
       margin: EdgeInsets.only(right: 10, top: 35),
       decoration: BoxDecoration(
-          color: Colors.yellow,
+          color: Colors.white,
           borderRadius: BorderRadius.all(Radius.circular(20))),
       child: Text(
         min ?? '0 Min',

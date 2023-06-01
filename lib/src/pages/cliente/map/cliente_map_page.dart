@@ -84,7 +84,7 @@ class _ClienteMapPageState extends State<ClienteMapPage> {
                   _con.cliente?.username ?? 'Nombre de usuario',
                   style: TextStyle(
                       fontSize: 18,
-                      color: Colors.black,
+                      color: Colors.white,
                       fontWeight: FontWeight.bold),
                   maxLines: 1,
                 )),
@@ -93,7 +93,7 @@ class _ClienteMapPageState extends State<ClienteMapPage> {
                   _con.cliente?.email ?? 'Correo electronico',
                   style: TextStyle(
                       fontSize: 14,
-                      color: Colors.grey[800],
+                      color: Colors.white,
                       fontWeight: FontWeight.bold),
                   maxLines: 1,
                 )),
@@ -106,7 +106,7 @@ class _ClienteMapPageState extends State<ClienteMapPage> {
                 )
               ],
             ),
-            decoration: BoxDecoration(color: Colors.amber),
+            decoration: BoxDecoration(color: Colors.black),
           ),
           ListTile(
             title: Text('Editar perfil'),
@@ -148,7 +148,7 @@ class _ClienteMapPageState extends State<ClienteMapPage> {
               padding: EdgeInsets.all(10),
               child: Icon(
                 Icons.location_searching,
-                color: Colors.grey[600],
+                color: Colors.black,
                 size: 20,
               ),
             ),
@@ -170,7 +170,7 @@ class _ClienteMapPageState extends State<ClienteMapPage> {
               padding: EdgeInsets.all(10),
               child: Icon(
                 Icons.refresh,
-                color: Colors.grey[600],
+                color: Colors.black,
                 size: 20,
               ),
             ),
@@ -201,8 +201,8 @@ class _ClienteMapPageState extends State<ClienteMapPage> {
       child: ElevatedButton(
         onPressed: _con.requestDriver,
         style: ElevatedButton.styleFrom(
-          onPrimary: Colors.black,
-          primary: _con.isConnect ? Colors.grey[300] : Colors.amber,
+          onPrimary: Colors.white,
+          primary: _con.isConnect ? Colors.grey[300] : Colors.black,
         ),
         child: const Text('SOLICITAR'),
       ),
@@ -273,7 +273,7 @@ class _ClienteMapPageState extends State<ClienteMapPage> {
       children: [
         Text(
           title,
-          style: TextStyle(color: Colors.grey, fontSize: 10),
+          style: TextStyle(color: Colors.black, fontSize: 12),
           textAlign: TextAlign.start,
         ),
         Text(

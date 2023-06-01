@@ -86,7 +86,7 @@ class _ClienteRegisterPageState extends State<ClienteRegisterPage> {
       child: TextField(
         controller: _con.usernameController,
         decoration: InputDecoration(
-            hintText: 'Yenns Noya',
+            hintText: 'Tu nombre',
             labelText: 'Nombre de usuario',
             suffixIcon: Icon(
               Icons.person_outlined,
