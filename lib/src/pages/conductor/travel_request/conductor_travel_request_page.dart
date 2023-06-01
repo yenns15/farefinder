@@ -47,7 +47,7 @@ class _ConductorTravelRequestPageState
           children: [
             Container(
               height: 50,
-              color: Colors.amber,
+              color: Colors.black,
               margin: EdgeInsets.all(30),
               decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
               padding: EdgeInsets.only(left: 20, right: 20),
@@ -55,14 +55,14 @@ class _ConductorTravelRequestPageState
                 onPressed: _con.cancelTravel,
                 child: Text(
                   'Cancelar',
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
             ),
             SizedBox(width: 10), 
             Container(
               height: 50,
-              color: Colors.amber,
+              color: Colors.black,
               margin: EdgeInsets.all(30),
               decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
               padding: EdgeInsets.only(left: 20, right: 20),
@@ -70,7 +70,7 @@ class _ConductorTravelRequestPageState
                 onPressed: _con.acceptTravel,
                 child: Text(
                   'Aceptar',
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
             ),

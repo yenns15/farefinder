@@ -65,7 +65,7 @@ class _ConductorMapPageState extends State<ConductorMapPage> {
                   _con.conductor?.username?? 'Nombre de usuario',
                   style: TextStyle(
                       fontSize: 18,
-                      color: Colors.black,
+                      color: Colors.white,
                       fontWeight: FontWeight.bold),
                   maxLines: 1,
                 )),
@@ -74,7 +74,7 @@ class _ConductorMapPageState extends State<ConductorMapPage> {
                   _con.conductor?.email ?? 'Correo electronico',
                   style: TextStyle(
                       fontSize: 14,
-                      color: Colors.grey[800],
+                      color: Colors.white,
                       fontWeight: FontWeight.bold),
                   maxLines: 1,
                 )),
@@ -89,7 +89,7 @@ class _ConductorMapPageState extends State<ConductorMapPage> {
               ],
             ),
             decoration: BoxDecoration(
-              color: Colors.amber
+              color: Colors.black
             ),
           ),
           ListTile(
@@ -160,8 +160,8 @@ class _ConductorMapPageState extends State<ConductorMapPage> {
       child: ElevatedButton(
         onPressed: _con.connect,
         style: ElevatedButton.styleFrom(
-          onPrimary: Colors.black,
-          primary: _con.isConnect ? Colors.grey[300] : Colors.amber,
+          onPrimary: Colors.white,
+          primary: _con.isConnect ? Colors.grey[800] : Colors.black,
         ),
         child: Text(_con.isConnect ? 'DESCONECTARSE' : 'CONECTARSE'),
       ),
