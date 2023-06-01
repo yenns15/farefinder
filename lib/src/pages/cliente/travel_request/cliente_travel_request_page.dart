@@ -46,7 +46,7 @@ class _ClienteTravelRequestPageState extends State<ClienteTravelRequestPage> {
           _textCounter(),
           Container(
             height: 50,
-            color: Colors.amber,
+            color: Colors.black,
             margin: EdgeInsets.all(30),
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
             padding: EdgeInsets.only(left: 20,right: 20),
@@ -56,7 +56,7 @@ class _ClienteTravelRequestPageState extends State<ClienteTravelRequestPage> {
             },
             child: Text(
               'Cancelar',
-              style: TextStyle(color: Colors.black),),
+              style: TextStyle(color: Colors.white),),
             ),
           )
         ],

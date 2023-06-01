@@ -62,12 +62,12 @@ class _ClienteTravelCalificacionesPageState
       child: ElevatedButton(
         onPressed: _con.calificate,
         style: ElevatedButton.styleFrom(
-          primary: Colors.amber,
+          primary: Colors.black,
         ),
         child: Text(
           'CALIFICAR',
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white,
           ),
         ),
       ),
@@ -79,7 +79,7 @@ class _ClienteTravelCalificacionesPageState
       child: RatingBar.builder(
         itemBuilder: (context, _) => Icon(
           Icons.star,
-          color: Colors.amber,
+          color: Colors.black,
         ),
         itemCount: 5,
         initialRating: 0,
@@ -99,7 +99,7 @@ class _ClienteTravelCalificacionesPageState
     return Text(
       'CALIFICA A TU CONDUCTOR',
       style: TextStyle(
-          color: Colors.cyan, fontWeight: FontWeight.bold, fontSize: 18),
+          color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
     );
   }
 
@@ -135,21 +135,21 @@ class _ClienteTravelCalificacionesPageState
       child: Container(
         height: 280,
         width: double.infinity,
-        color: Colors.amber,
+        color: Colors.black,
         child: SafeArea(
           child: Column(
             children: [
-              Icon(Icons.check_circle, color: Colors.grey[800], size: 100),
+              Icon(Icons.check_circle, color: Colors.white, size: 100),
               SizedBox(height: 20),
               Text(
                 'TU VIAJE HA FINALIZADO',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,  color: Colors.white),
               ),
               SizedBox(height: 30),
               Text(
                 'Valor del viaje',
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 16,  color: Colors.white
                 ),
               ),
               SizedBox(height: 5),
@@ -157,7 +157,7 @@ class _ClienteTravelCalificacionesPageState
                 '${_con.travelHistory?.price ?? ''}',
                 style: TextStyle(
                     fontSize: 25,
-                    color: Colors.green,
+                    color: Colors.white,
                     fontWeight: FontWeight.bold),
               ),
             ],
