@@ -65,6 +65,43 @@ class TravelHistoryProvider {
     return travelHistoryList;
   }
 
+
+
+
+    static Stream<QuerySnapshot> consulta2(String idConductor) {
+    _authProvider = AuthProvider();
+    Query querySnapshot = _ref
+        .where('idConductor', isEqualTo: _authProvider.getUser()!.uid)
+        .orderBy('timestamp', descending: true);
+
+    return querySnapshot.snapshots();
+  }
+
+  Future<List<TravelHistory>> getByIdConductor(String idConductor) async {
+    QuerySnapshot querySnapshot = await _ref
+        .where('idConductor', isEqualTo: idConductor)
+        .orderBy('timestamp', descending: true)
+        .get();
+    List<Map<String, dynamic>> allData = querySnapshot.docs
+        .map((doc) => doc.data() as Map<String, dynamic>)
+        .toList();
+
+    print(allData);
+
+    List<TravelHistory> travelHistoryList = [];
+    List<Map<String, dynamic>> allDataCopy =
+        List.from(allData); // Crear una copia de la lista
+
+    print(allDataCopy[0]); // Imprimir el contenido de la lista allDataCopy
+
+    for (Map<String, dynamic> data in allDataCopy) {
+      travelHistoryList.add(
+          TravelHistory.fromJson(json.encode(data) as Map<String, dynamic>));
+      print(data);
+    }
+    return travelHistoryList;
+  }
+
   Stream<DocumentSnapshot> getByIdStream(String id) {
     return _ref.doc(id).snapshots(includeMetadataChanges: true);
   }
