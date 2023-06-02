@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:farefinder/src/models/travel_history.dart';
 import 'package:farefinder/src/pages/cliente/history/cliente_history_controller.dart';
 import 'package:farefinder/src/providers/travel_history_provider.dart';
+import 'package:farefinder/src/utils/relative_time_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
@@ -37,17 +38,19 @@ class _ClienteHistoryPageState extends State<ClienteHistoryPage> {
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
             print("------------------------------");
             print(snapshot.data?.docs.length);
+
             return ListView.builder(
                 itemCount: snapshot.data?.docs.length,
                 itemBuilder: (_, index) {
+                  print(snapshot.data?.docs[index]['price']);
+                 
                   return _cardHistoryInfo(
-                    snapshot.data?.docs[index]['from']??"","","","","","");
-                      /*snapshot.data![index].from,
-                      snapshot.data![index].to,
-                      'Nombre Conductor',
-                      snapshot.data![index].price.toString(),
-                      snapshot.data![index].calificacionesConductor.toString(),
-                      snapshot.data![index].timestamp.toString());*/
+                      snapshot.data?.docs[index]['from'] ?? "",
+                      snapshot.data?.docs[index]['to'] ?? "",
+                      snapshot.data?.docs[index]['price']?.toString()?? '',
+                      snapshot.data?.docs[index]['calificacionesConductor']?.toString()?? '',
+                    RelativeTimeUtil.getRelativeTime(snapshot.data?.docs[index]['timestamp']?? 0),
+                    );
                 });
           },
         ));
@@ -56,7 +59,6 @@ class _ClienteHistoryPageState extends State<ClienteHistoryPage> {
   Widget _cardHistoryInfo(
     String from,
     String to,
-    String name,
     String price,
     String calificaciones,
     String timestamp,
@@ -202,6 +204,6 @@ class _ClienteHistoryPageState extends State<ClienteHistoryPage> {
   }
 
   void refresh() {
-    setState((){});
-}
+    setState(() {});
+  }
 }
