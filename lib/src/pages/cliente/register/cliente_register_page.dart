@@ -143,26 +143,19 @@ class _ClienteRegisterPageState extends State<ClienteRegisterPage> {
     );
   }
 
-  Widget _bannerApp() {
-    return ClipPath(
-      clipper: WaveClipperTwo(),
-      child: Container(
-        color: utils.colors.farefinder,
-        height: MediaQuery.of(context).size.height * 0.15,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Image.asset(
-              'assets/img/logo_app.png',
-              width: 150,
-              height: 100,
-            ),
-            const Text('Nuestro servicio tu destino',
-                style: TextStyle(color: Colors.white))
-          ],
+Widget _bannerApp() {
+  return ClipPath(
+    clipper: DiagonalPathClipperTwo(),
+    child: Container(
+      color: Colors.black,
+      height: MediaQuery.of(context).size.height * 0.20,
+      child: FittedBox(
+        fit: BoxFit.fill,
+        child: Image.asset(
+          'assets/img/logos_app.png',
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }

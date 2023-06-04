@@ -51,27 +51,21 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _bannerApp(BuildContext context) {
-    return ClipPath(
-      clipper: DiagonalPathClipperTwo(),
-      child: Container(
-        color: Colors.black,
-        height: MediaQuery.of(context).size.height * 0.30,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Image.asset(
-              'assets/img/logo_app.png',
-              width: 150,
-              height: 100,
-            ),
-            Text('Nuestro servicio tu destino',
-                style: TextStyle(color: Colors.white)),
-          ],
+Widget _bannerApp(BuildContext context) {
+  return ClipPath(
+    clipper: DiagonalPathClipperTwo(),
+    child: Container(
+      color: Colors.black,
+      height: MediaQuery.of(context).size.height * 0.30,
+      child: FittedBox(
+        fit: BoxFit.fill,
+        child: Image.asset(
+          'assets/img/logos_app.png',
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 
   Widget _textSelectYourRol() {
     return Text(
