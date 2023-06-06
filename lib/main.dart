@@ -65,7 +65,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Farefinder',
+      title: 'FareFinder',
       navigatorKey: navigatorKey,
       initialRoute: 'home',
       theme: ThemeData(

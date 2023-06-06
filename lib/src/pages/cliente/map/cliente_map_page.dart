@@ -62,7 +62,7 @@ class _ClienteMapPageState extends State<ClienteMapPage> {
   //icono de localizacion
   Widget _iconMyLocation() {
     return Image.asset(
-      'assets/img/my_location_yellow.png',
+      'assets/img/my_location.png',
       width: 65,
       height: 65,
     );
