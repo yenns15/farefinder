@@ -146,7 +146,7 @@ class _ConductorMapPageState extends State<ConductorMapPage> {
         onPressed: _con.openDrawer,
         icon: Icon(
           Icons.menu,
-          color: Colors.white,
+          color: Colors.black,
         ),
       ),
     );

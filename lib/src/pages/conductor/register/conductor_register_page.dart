@@ -42,6 +42,7 @@ class _ConductorRegisterPageState extends State<ConductorRegisterPage> {
           child: Column(
             children: [
               _bannerApp(),
+              SizedBox(height: 30),
               _textLogin(),
               SizedBox(height: MediaQuery.of(context).size.height * 0.08),
               _textLicencePlate(),
@@ -174,15 +175,20 @@ class _ConductorRegisterPageState extends State<ConductorRegisterPage> {
   }
 
  Widget _bannerApp() {
-  return ClipPath(
-    clipper: DiagonalPathClipperTwo(),
-    child: Container(
-      color: Colors.black,
-      height: MediaQuery.of(context).size.height * 0.20,
-      child: FittedBox(
-        fit: BoxFit.fill,
-        child: Image.asset(
-          'assets/img/logos_app.png',
+  return Container(
+    color: Colors.black,
+    height: MediaQuery.of(context).size.height * 0.20,
+    child: FittedBox(
+      fit: BoxFit.fill,
+      child: Image.asset(
+        'assets/img/logos_app.png',
+      ),
+    ),
+    decoration: BoxDecoration(
+      border: Border(
+        bottom: BorderSide(
+          color: Colors.transparent, // Cambiar el color del borde inferior aquí si es necesario
+          width: 1.0, // Cambiar el ancho del borde inferior aquí si es necesario
         ),
       ),
     ),

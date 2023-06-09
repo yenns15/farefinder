@@ -43,7 +43,7 @@ class _ClienteTravelRequestPageState extends State<ClienteTravelRequestPage> {
           _driverInfo(),
           _lottieAnimation(),
           _textLookingFor(),
-          _textCounter(),
+         // _textCounter(),
           Container(
             height: 50,
             color: Colors.black,

@@ -43,8 +43,20 @@ class _HomePageState extends State<HomePage> {
             _imageTypeUser(context, 'assets/img/conductor.png','conductor'),
             SizedBox(height: 10),
             _textTypeUser(
-              'Conductor',
-            )
+              'Conductor'
+            ),
+             SizedBox(height: 50),
+            _creadores(),
+             SizedBox(height: 10),
+             _yulith(),
+              SizedBox(height: 10),
+              _elian(),
+               SizedBox(height: 10),
+               _yenns(),
+                SizedBox(height: 10),
+                _universidad()
+
+
           ],
         ),
       ),
@@ -52,20 +64,26 @@ class _HomePageState extends State<HomePage> {
   }
 
 Widget _bannerApp(BuildContext context) {
-  return ClipPath(
-    clipper: DiagonalPathClipperTwo(),
-    child: Container(
-      color: Colors.black,
-      height: MediaQuery.of(context).size.height * 0.30,
-      child: FittedBox(
-        fit: BoxFit.fill,
-        child: Image.asset(
-          'assets/img/logos_app.png',
+  return Container(
+    color: Colors.black,
+    height: MediaQuery.of(context).size.height * 0.20,
+    child: FittedBox(
+      fit: BoxFit.fill,
+      child: Image.asset(
+        'assets/img/logos_app.png',
+      ),
+    ),
+    decoration: BoxDecoration(
+      border: Border(
+        bottom: BorderSide(
+          color: Colors.transparent, // Cambiar el color del borde inferior aquí si es necesario
+          width: 1.0, // Cambiar el ancho del borde inferior aquí si es necesario
         ),
       ),
     ),
   );
 }
+
 
   Widget _textSelectYourRol() {
     return Text(
@@ -87,6 +105,39 @@ Widget _bannerApp(BuildContext context) {
   Widget _textTypeUser(String typeUser) {
     return Text(
       typeUser,
+      style: TextStyle(color: Colors.black),
+    );
+  }
+
+  Widget _creadores() {
+    return const Text(
+      'CREADO POR:',
+      style: TextStyle(color: Colors.black),
+    );
+  }
+
+ Widget _yulith() {
+    return const Text(
+      'YULITH CARRASCAL',
+      style: TextStyle(color: Colors.black),
+    );
+  }
+  Widget _elian() {
+    return const Text(
+      'ELIAN FRAGOZO',
+      style: TextStyle(color: Colors.black),
+    );
+  }
+  
+  Widget _yenns() {
+    return const Text(
+      'YENNS NOYA',
+      style: TextStyle(color: Colors.black),
+    );
+  }
+  Widget _universidad() {
+    return const Text(
+      'UNIVERSIDAD POPULAR DEL CESAR ',
       style: TextStyle(color: Colors.black),
     );
   }
